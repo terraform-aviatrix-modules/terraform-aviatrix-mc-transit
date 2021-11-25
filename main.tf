@@ -28,14 +28,14 @@ resource "aviatrix_vpc" "default" {
   }
 }
 
-#Spoke GW
+#Transit GW
 resource "aviatrix_transit_gateway" "default" {
   enable_active_mesh               = var.active_mesh
   cloud_type                       = local.cloud_type
   vpc_reg                          = local.region
   gw_name                          = local.name
   gw_size                          = local.instance_size
-  vpc_id                           = var.use_existing_vpc ? var.vpc_id : (local.cloud == "oci" ? aviatrix_vpc.default[0].name : aviatrix_vpc.default[0].vpc_id)
+  vpc_id                           = local.cloud == "oci" ? aviatrix_vpc.default.name : aviatrix_vpc.default.vpc_id
   account_name                     = var.account
   subnet                           = local.subnet
   ha_subnet                        = var.ha_gw ? local.ha_subnet : null
@@ -64,9 +64,9 @@ resource "aviatrix_transit_gateway" "default" {
   customer_managed_keys            = var.customer_managed_keys
   tunnel_detection_time            = var.tunnel_detection_time
   tags                             = var.tags
-  availability_domain              = local.cloud == "oci" ? aviatrix_vpc.default[0].availability_domains[0] : null
-  fault_domain                     = local.cloud == "oci" ? aviatrix_vpc.default[0].fault_domains[0] : null
-  ha_availability_domain           = var.ha_gw ? (local.cloud == "oci" ? aviatrix_vpc.default[0].availability_domains[1] : null) : null
-  ha_fault_domain                  = var.ha_gw ? (local.cloud == "oci" ? aviatrix_vpc.default[0].fault_domains[1] : null) : null
+  availability_domain              = local.cloud == "oci" ? aviatrix_vpc.default.availability_domains[0] : null
+  fault_domain                     = local.cloud == "oci" ? aviatrix_vpc.default.fault_domains[0] : null
+  ha_availability_domain           = var.ha_gw ? (local.cloud == "oci" ? aviatrix_vpc.default.availability_domains[1] : null) : null
+  ha_fault_domain                  = var.ha_gw ? (local.cloud == "oci" ? aviatrix_vpc.default.fault_domains[1] : null) : null
   enable_multi_tier_transit        = var.enable_multi_tier_transit
 }
