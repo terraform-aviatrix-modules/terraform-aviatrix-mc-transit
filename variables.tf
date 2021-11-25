@@ -11,6 +11,7 @@ variable "cloud" {
 variable "name" {
   description = "Name for this transit VPC and it's gateways"
   type        = string
+  default     = ""
 }
 
 variable "prefix" {
