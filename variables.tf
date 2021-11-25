@@ -121,6 +121,12 @@ variable "enable_multi_tier_transit" {
   default     = false
 }
 
+variable "enable_advertise_transit_cidr" {
+  description = "Switch to enable/disable advertise transit VPC network CIDR for a VGW connection"
+  type        = bool
+  default     = false
+}
+
 variable "local_as_number" {
   description = "Changes the Aviatrix Transit Gateway ASN number before you setup Aviatrix Transit Gateway connection configurations."
   type        = string
