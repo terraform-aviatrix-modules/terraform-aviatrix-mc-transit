@@ -5,8 +5,8 @@ resource "aviatrix_vpc" "default" {
   cidr                 = local.cloud == "gcp" ? null : var.cidr
   account_name         = var.account
   name                 = local.name
-  aviatrix_transit_vpc = true
-  aviatrix_firenet_vpc = false
+  aviatrix_transit_vpc = local.cloud == "azure" ? false : true
+  aviatrix_firenet_vpc = local.cloud == "azure" ? true : false
   resource_group       = var.resource_group
 
   dynamic "subnets" {
