@@ -269,7 +269,7 @@ locals {
 
   subnet = var.insane_mode ? local.insane_mode_subnet : (local.cloud == "gcp" ? aviatrix_vpc.default.subnets[local.subnet_map[local.cloud]].cidr : aviatrix_vpc.default.public_subnets[local.subnet_map[local.cloud]].cidr)
   subnet_map = {
-    azure = 0,
+    azure = 2,
     aws   = 0
     gcp   = 0,
     oci   = 0,
@@ -278,7 +278,7 @@ locals {
 
   ha_subnet = var.insane_mode ? local.ha_insane_mode_subnet : (local.cloud == "gcp" ? aviatrix_vpc.default.subnets[local.ha_subnet_map[local.cloud]].cidr : aviatrix_vpc.default.public_subnets[local.ha_subnet_map[local.cloud]].cidr)
   ha_subnet_map = {
-    azure = 0,
+    azure = 3,
     aws   = 1
     gcp   = length(var.ha_region) > 0 ? 1 : 0
     oci   = 0,
