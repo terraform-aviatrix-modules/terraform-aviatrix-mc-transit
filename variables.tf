@@ -292,7 +292,7 @@ locals {
   ha_zone = lookup(local.ha_zone_map, local.cloud, null)
   ha_zone_map = {
     azure = local.az2,
-    gcp   = local.cloud == "aws" ? length(var.ha_region) > 0 ? "${var.ha_region}-${local.az2}" : "${var.region}-${local.az2}" : null
+    gcp   = local.cloud == "gcp" ? length(var.ha_region) > 0 ? "${var.ha_region}-${local.az2}" : "${var.region}-${local.az2}" : null
   }
 
   insane_mode_az = var.insane_mode ? lookup(local.insane_mode_az_map, local.cloud, null) : null
