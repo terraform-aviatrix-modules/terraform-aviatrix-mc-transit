@@ -5,7 +5,7 @@ resource "aviatrix_vpc" "default" {
   cidr                 = local.cloud == "gcp" ? null : var.cidr
   account_name         = var.account
   name                 = local.name
-  aviatrix_transit_vpc = local.cloud == "azure" ? false : true
+  aviatrix_transit_vpc = contains(["aws", "ali"], local.cloud) ? true : false
   aviatrix_firenet_vpc = local.cloud == "azure" ? true : false
   resource_group       = var.resource_group
 
