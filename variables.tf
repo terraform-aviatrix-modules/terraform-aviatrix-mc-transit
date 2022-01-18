@@ -12,18 +12,11 @@ variable "name" {
   description = "Name for this transit VPC and it's gateways"
   type        = string
   default     = ""
-}
 
-variable "prefix" {
-  description = "Boolean to determine if name will be prepended with avx-"
-  type        = bool
-  default     = true
-}
-
-variable "suffix" {
-  description = "Boolean to determine if name will be appended with -transit"
-  type        = bool
-  default     = true
+  validation {
+    condition     = length(var.name) <= 50
+    error_message = "Name is too long. Max length is 50 characters."
+  }  
 }
 
 variable "region" {
@@ -77,12 +70,22 @@ variable "cidr" {
   description = "The CIDR range to be used for the VPC"
   type        = string
   default     = ""
+
+  validation {
+    condition     = var.cidr != "" ? can(cidrnetmask(var.cidr)) : true
+    error_message = "This does not like a valid CIDR."
+  }  
 }
 
 variable "ha_cidr" {
   description = "CIDR of the HA GCP subnet"
   type        = string
   default     = ""
+
+  validation {
+    condition     = var.cidr != "" ? can(cidrnetmask(var.cidr)) : true
+    error_message = "This does not like a valid CIDR."
+  }  
 }
 
 variable "enable_firenet" {
@@ -134,7 +137,7 @@ variable "local_as_number" {
 }
 
 variable "enable_bgp_over_lan" {
-  description = "Enable BGp over LAN. Creates eth4 for integration with SDWAN for example"
+  description = "Enable BGP over LAN. Creates eth4 for integration with SDWAN for example"
   type        = bool
   default     = false
 }
@@ -214,24 +217,17 @@ variable "tunnel_detection_time" {
   description = "The IPsec tunnel down detection time for the Transit Gateway in seconds. Must be a number in the range [20-600]."
   type        = number
   default     = null
+
+  validation {
+    condition     = var.tunnel_detection_time != null ? (var.tunnel_detection_time >= 20 && var.tunnel_detection_time <= 600) : true
+    error_message = "Invalid value. Must be in range 20-600."
+  }  
 }
 
 variable "tags" {
   description = "Map of tags to assign to the gateway."
   type        = map(string)
   default     = null
-}
-
-variable "china" {
-  description = "Set to true if deploying this module in AWS/Azure China."
-  type        = bool
-  default     = false
-}
-
-variable "gov" {
-  description = "Set to true if deploying this module in AWS/Azure GOV."
-  type        = bool
-  default     = false
 }
 
 variable "resource_group" {
@@ -242,10 +238,8 @@ variable "resource_group" {
 
 locals {
   cloud                 = lower(var.cloud)
-  prefix                = var.prefix ? "avx-" : ""
-  suffix                = var.suffix ? "-transit" : ""
-  lower_name            = length(var.name) > 0 ? replace(lower(var.name), " ", "-") : replace(lower(var.region), " ", "-")
-  name                  = "${local.prefix}${local.lower_name}${local.suffix}"
+  name                  = length(var.name) > 0 ? replace(var.name, " ", "-") : local.default_name
+  default_name          = "avx-${var.region}-transit"
   cidr                  = var.cidr
   cidrbits              = tonumber(split("/", local.cidr)[1])
   newbits               = 26 - local.cidrbits
@@ -305,7 +299,10 @@ locals {
     aws = local.cloud == "aws" ? "${var.region}${local.az2}" : null,
   }
 
-  cloud_type = var.china ? lookup(local.cloud_type_map_china, local.cloud, null) : (var.gov ? lookup(local.cloud_type_map_gov, local.cloud, null) : lookup(local.cloud_type_map, local.cloud, null))
+  is_china = can(regex("^cn-|^China ", var.region))
+  is_gov   = can(regex("^us-gov|^US Gov ", var.region))
+
+  cloud_type = local.is_china ? lookup(local.cloud_type_map_china, local.cloud, null) : (local.is_gov ? lookup(local.cloud_type_map_gov, local.cloud, null) : lookup(local.cloud_type_map, local.cloud, null))
   cloud_type_map = {
     azure = 8,
     aws   = 1,
