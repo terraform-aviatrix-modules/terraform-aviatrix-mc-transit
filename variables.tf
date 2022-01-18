@@ -16,7 +16,7 @@ variable "name" {
   validation {
     condition     = length(var.name) <= 50
     error_message = "Name is too long. Max length is 50 characters."
-  }  
+  }
 }
 
 variable "region" {
@@ -74,7 +74,7 @@ variable "cidr" {
   validation {
     condition     = var.cidr != "" ? can(cidrnetmask(var.cidr)) : true
     error_message = "This does not like a valid CIDR."
-  }  
+  }
 }
 
 variable "ha_cidr" {
@@ -85,7 +85,7 @@ variable "ha_cidr" {
   validation {
     condition     = var.cidr != "" ? can(cidrnetmask(var.cidr)) : true
     error_message = "This does not like a valid CIDR."
-  }  
+  }
 }
 
 variable "enable_firenet" {
@@ -221,7 +221,7 @@ variable "tunnel_detection_time" {
   validation {
     condition     = var.tunnel_detection_time != null ? (var.tunnel_detection_time >= 20 && var.tunnel_detection_time <= 600) : true
     error_message = "Invalid value. Must be in range 20-600."
-  }  
+  }
 }
 
 variable "tags" {
