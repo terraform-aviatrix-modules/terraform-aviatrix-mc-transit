@@ -12,22 +12,22 @@ terraform {
 module "non_ha" {
   source = "../.."
 
-  cloud    = "aws"
-  name     = "non-ha"
-  region   = "eu-central-1"
-  cidr     = "10.1.101.0/24"
-  account  = "AWS"
-  ha_gw    = false
+  cloud   = "aws"
+  name    = "non-ha"
+  region  = "eu-central-1"
+  cidr    = "10.1.101.0/24"
+  account = "AWS"
+  ha_gw   = false
 }
 
 module "ha" {
   source = "../.."
 
-  cloud    = "aws"
-  name     = "ha"
-  region   = "eu-central-1"
-  cidr     = "10.1.102.0/24"
-  account  = "AWS"
+  cloud   = "aws"
+  name    = "ha"
+  region  = "eu-central-1"
+  cidr    = "10.1.102.0/24"
+  account = "AWS"
 }
 
 resource "test_assertions" "cloud_type_non_ha" {
