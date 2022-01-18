@@ -83,7 +83,7 @@ variable "ha_cidr" {
   default     = ""
 
   validation {
-    condition     = var.cidr != "" ? can(cidrnetmask(var.cidr)) : true
+    condition     = var.ha_cidr != "" ? can(cidrnetmask(var.ha_cidr)) : true
     error_message = "This does not like a valid CIDR."
   }
 }
