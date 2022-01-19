@@ -9,24 +9,24 @@ terraform {
   }
 }
 
-module "non_ha" {
+module "transit_non_ha_aws" {
   source = "../.."
 
   cloud   = "aws"
-  name    = "non-ha"
+  name    = "transit-non-ha-aws"
   region  = "eu-central-1"
-  cidr    = "10.1.101.0/24"
+  cidr    = "10.1.0.0/23"
   account = "AWS"
   ha_gw   = false
 }
 
-module "ha" {
+module "transit_ha_aws" {
   source = "../.."
 
   cloud   = "aws"
-  name    = "ha"
+  name    = "transit-ha-aws"
   region  = "eu-central-1"
-  cidr    = "10.1.102.0/24"
+  cidr    = "10.2.0.0/23"
   account = "AWS"
 }
 
@@ -35,7 +35,7 @@ resource "test_assertions" "cloud_type_non_ha" {
 
   equal "cloud_type_non_ha" {
     description = "Module output is equal to check map."
-    got         = module.non_ha.transit_gateway.cloud_type
+    got         = module.transit_non_ha_aws.transit_gateway.cloud_type
     want        = 1
   }
 }
@@ -45,7 +45,7 @@ resource "test_assertions" "cloud_type_ha" {
 
   equal "cloud_type_ha" {
     description = "Module output is equal to check map."
-    got         = module.ha.transit_gateway.cloud_type
+    got         = module.transit_ha_aws.transit_gateway.cloud_type
     want        = 1
   }
 }
