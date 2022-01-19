@@ -9,7 +9,7 @@ module "aws_transit" {
 
   cloud         = "aws"
   region        = "eu-west-3"
-  cidr          = "192.168.90.0/23"
+  cidr          = "10.1.0.0/23"
   account       = "AWS"
 }
 ```
