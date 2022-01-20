@@ -4,7 +4,7 @@ In this example, the module deploys the transit VPC as well as a HA pair of Avia
 
 ```
 module "aws_transit" {
-  source  = "terraform-aviatrix-modules/mc-spoke/aviatrix"
+  source  = "terraform-aviatrix-modules/mc-transit/aviatrix"
   version = "1.0.0"
 
   cloud         = "aws"

@@ -1,5 +1,5 @@
 module "aws_transit" {
-  source  = "terraform-aviatrix-modules/mc-spoke/aviatrix"
+  source  = "terraform-aviatrix-modules/mc-transit/aviatrix"
   version = "1.0.0"
 
   cloud   = "aws"
