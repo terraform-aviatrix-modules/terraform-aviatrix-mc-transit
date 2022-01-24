@@ -17,6 +17,11 @@ variable "name" {
     condition     = length(var.name) <= 50
     error_message = "Name is too long. Max length is 50 characters."
   }
+
+  validation {
+    condition     = can(regex("^[a-zA-Z0-9-_]*$", var.name))
+    error_message = "For the transit name value only a-z, A-Z, 0-9 and hyphens and underscores are allowed."    
+  }  
 }
 
 variable "region" {
@@ -238,8 +243,8 @@ variable "resource_group" {
 
 locals {
   cloud                 = lower(var.cloud)
-  name                  = length(var.name) > 0 ? replace(var.name, " ", "-") : local.default_name
-  default_name          = "avx-${var.region}-transit"
+  name                  = length(var.name) > 0 ? var.name : local.default_name
+  default_name          = replace("avx-${var.region}-transit", " ", "-") #Remove spaces from region names
   cidr                  = var.cidr
   cidrbits              = tonumber(split("/", local.cidr)[1])
   newbits               = 26 - local.cidrbits
