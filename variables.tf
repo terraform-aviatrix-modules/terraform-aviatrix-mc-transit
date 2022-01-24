@@ -20,8 +20,8 @@ variable "name" {
 
   validation {
     condition     = can(regex("^[a-zA-Z0-9-_]*$", var.name))
-    error_message = "For the transit name value only a-z, A-Z, 0-9 and hyphens and underscores are allowed."    
-  }  
+    error_message = "For the transit name value only a-z, A-Z, 0-9 and hyphens and underscores are allowed."
+  }
 }
 
 variable "region" {
@@ -244,7 +244,7 @@ variable "resource_group" {
 locals {
   cloud                 = lower(var.cloud)
   name                  = length(var.name) > 0 ? var.name : local.default_name
-  default_name          = replace("avx-${var.region}-transit", " ", "-") #Remove spaces from region names
+  default_name          = lower(replace("avx-${var.region}-transit", " ", "-")) #Remove spaces from region names and force lowercase
   cidr                  = var.cidr
   cidrbits              = tonumber(split("/", local.cidr)[1])
   newbits               = 26 - local.cidrbits
