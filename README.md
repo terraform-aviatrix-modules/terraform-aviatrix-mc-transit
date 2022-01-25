@@ -1,15 +1,12 @@
 # terraform-aviatrix-mc-transit
 
 ### Description
-Deploys a VPC/VNET/VCN and Aviatrix Transit gateways. Also possible to use an existing VPC/VNET/VCN.
-
-### Diagram
-\<Provide a diagram of the high level constructs thet will be created by this module>
-<img src="<IMG URL>"  height="250">
+Deploys a VPC/VNET/VCN and Aviatrix Transit gateways.
 
 ### Compatibility
 Module version | Terraform version | Controller version | Terraform provider version
 :--- | :--- | :--- | :---
+v1.0.1 | 0.13-1.x | >= 6.4 | >= 0.2.19
 v1.0.0 | 0.13-1.x | >= 6.4 | >= 0.2.19
 
 ### Usage Examples
