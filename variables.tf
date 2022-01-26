@@ -188,12 +188,6 @@ variable "az_support" {
   default     = true
 }
 
-variable "active_mesh" {
-  description = "Set to false to disable active mesh."
-  type        = bool
-  default     = true
-}
-
 variable "single_az_ha" {
   description = "Set to true if Controller managed Gateway HA is desired"
   type        = bool
