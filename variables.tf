@@ -235,6 +235,30 @@ variable "resource_group" {
   default     = null
 }
 
+variable "bgp_lan_interfaces" {
+  description = "Interfaces to run BGP protocol on top of the ethernet interface."
+  type        = map(any)
+  default     = null
+}
+
+variable "ha_bgp_lan_interfaces" {
+  description = "Interfaces to run BGP protocol on top of the ethernet interface."
+  type        = map(any)
+  default     = null
+}
+
+variable "bgp_lan_ip_list" {
+  description = "List of available BGP LAN interface IPs for transit external device connection creation."
+  type        = list(string)
+  default     = null
+}
+
+variable "ha_bgp_lan_ip_list" {
+  description = "List of available BGP LAN interface IPs for transit external device connection creation."
+  type        = list(string)
+  default     = null
+}
+
 locals {
   cloud                 = lower(var.cloud)
   name                  = length(var.name) > 0 ? var.name : local.default_name
