@@ -69,8 +69,20 @@ resource "aviatrix_transit_gateway" "default" {
   ha_availability_domain           = var.ha_gw ? (local.cloud == "oci" ? aviatrix_vpc.default.availability_domains[1] : null) : null
   ha_fault_domain                  = var.ha_gw ? (local.cloud == "oci" ? aviatrix_vpc.default.fault_domains[1] : null) : null
   enable_multi_tier_transit        = var.enable_multi_tier_transit
-  bgp_lan_interfaces               = var.bgp_lan_interfaces
-  ha_bgp_lan_interfaces            = var.ha_bgp_lan_interfaces
-  bgp_lan_ip_list                  = var.bgp_lan_ip_list
-  ha_bgp_lan_ip_list               = var.ha_bgp_lan_ip_list
+
+  dynamic "bgp_lan_interfaces" {
+    for_each = var.bgp_lan_interfaces
+    content {
+      vpc_id = setting.value.vpc_id
+      subnet = setting.value.subnet
+    }
+  }
+
+  dynamic "ha_bgp_lan_interfaces" {
+    for_each = var.ha_bgp_lan_interfaces
+    content {
+      vpc_id = setting.value.vpc_id
+      subnet = setting.value.subnet
+    }
+  }
 }
