@@ -310,8 +310,8 @@ locals {
     aws = local.cloud == "aws" ? "${var.region}${local.az2}" : null,
   }
 
-  is_china = can(regex("^cn-|^China ", var.region))
-  is_gov   = can(regex("^us-gov|^US Gov ", var.region))
+  is_china = can(regex("^cn-|^China ", var.region)) && contains(["aws", "azure"], local.cloud) #If a region in Azure or AWS starts with China prefix, then results in true.
+  is_gov   = can(regex("^us-gov|^US Gov ", var.region)) && contains(["aws", "azure"], local.cloud) #If a region in Azure or AWS starts with Gov prefix, then results in true.
 
   cloud_type = local.is_china ? lookup(local.cloud_type_map_china, local.cloud, null) : (local.is_gov ? lookup(local.cloud_type_map_gov, local.cloud, null) : lookup(local.cloud_type_map, local.cloud, null))
   cloud_type_map = {
