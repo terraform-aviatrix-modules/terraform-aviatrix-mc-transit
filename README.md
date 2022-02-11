@@ -20,7 +20,7 @@ key | value
 :--- | :---
 cloud | Cloud where this is deployed. Valid values: "AWS", "Azure", "ALI", "OCI", "GCP"
 region | Cloud region to deploy this VPC/VNET/VCN in
-cidr | What ip CIDR to use for this VPC/VNET/VCN (Not required when use_existing_vpc is true)
+cidr | What ip CIDR to use for this VPC/VNET/VCN
 account | The account name as known by the Aviatrix controller
 
 The following variables are optional:
