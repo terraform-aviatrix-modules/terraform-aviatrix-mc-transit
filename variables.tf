@@ -332,12 +332,31 @@ locals {
     aws   = 256,
   }
 
-  instance_size = length(var.instance_size) > 0 ? var.instance_size : lookup(local.instance_size_map, local.cloud, null)
+  instance_size = (
+    length(var.instance_size) > 0 ? (
+      var.instance_size #If instance size is provided, use it.
+    )
+    :
+    (var.insane_mode ?
+      lookup(local.insane_mode_instance_size_map, local.cloud, null) #If instance size is not provided and var.insane_mode is true, lookup in this table.
+      :                                                              #
+      lookup(local.instance_size_map, local.cloud, null)             #If instance size is not provided and var.insane_mode is false, lookup in this table.
+    )
+  )
+
   instance_size_map = {
     azure = "Standard_B1ms",
     aws   = "t3.medium",
     gcp   = "n1-standard-1",
     oci   = "VM.Standard2.2",
     ali   = "ecs.g5ne.large",
+  }
+
+  insane_mode_instance_size_map = {
+    azure = "Standard_D3_v2",
+    aws   = "c5n.large",
+    gcp   = "n1-highcpu-4",
+    oci   = "VM.Standard2.2",
+    ali   = null
   }
 }
