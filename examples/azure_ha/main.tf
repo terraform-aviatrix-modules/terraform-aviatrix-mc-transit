@@ -1,6 +1,6 @@
 module "azure_transit" {
   source  = "terraform-aviatrix-modules/mc-transit/aviatrix"
-  version = "1.0.1"
+  version = "1.1.1"
 
   cloud   = "azure"
   region  = "West Europe"

@@ -247,6 +247,12 @@ variable "ha_bgp_lan_interfaces" {
   default     = {}
 }
 
+variable "enable_active_standby_preemptive" {
+  description = "Enables Preemptive Mode for Active-Standby. Available only with BGP enabled, HA enabled and Active-Standby enabled."
+  type        = bool
+  default     = false
+}
+
 locals {
   cloud                 = lower(var.cloud)
   name                  = length(var.name) > 0 ? var.name : local.default_name
