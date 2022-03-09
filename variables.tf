@@ -237,13 +237,13 @@ variable "resource_group" {
 
 variable "bgp_lan_interfaces" {
   description = "Interfaces to run BGP protocol on top of the ethernet interface."
-  type        = list
+  type        = list(any)
   default     = []
 }
 
 variable "ha_bgp_lan_interfaces" {
   description = "Interfaces to run BGP protocol on top of the ethernet interface."
-  type        = list
+  type        = list(any)
   default     = []
 }
 
