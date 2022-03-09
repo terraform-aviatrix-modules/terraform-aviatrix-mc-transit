@@ -237,14 +237,14 @@ variable "resource_group" {
 
 variable "bgp_lan_interfaces" {
   description = "Interfaces to run BGP protocol on top of the ethernet interface."
-  type        = map(any)
-  default     = {}
+  type        = list
+  default     = []
 }
 
 variable "ha_bgp_lan_interfaces" {
   description = "Interfaces to run BGP protocol on top of the ethernet interface."
-  type        = map(any)
-  default     = {}
+  type        = list
+  default     = []
 }
 
 variable "enable_active_standby_preemptive" {
