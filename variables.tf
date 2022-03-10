@@ -253,6 +253,12 @@ variable "enable_active_standby_preemptive" {
   default     = false
 }
 
+variable "legacy_transit_vpc" {
+  description = "Retains pre v2.x behavior of the module, where it creates a transit VPC instead of firenet VPC in AWS." #Deliberately unpublished in readme
+  type        = bool
+  default     = false
+}
+
 locals {
   cloud                 = lower(var.cloud)
   name                  = length(var.name) > 0 ? var.name : local.default_name
@@ -343,7 +349,7 @@ locals {
       var.instance_size #If instance size is provided, use it.
     )
     :
-    (var.insane_mode ?
+    (var.insane_mode || var.enable_transit_firenet ?
       lookup(local.insane_mode_instance_size_map, local.cloud, null) #If instance size is not provided and var.insane_mode is true, lookup in this table.
       :                                                              #
       lookup(local.instance_size_map, local.cloud, null)             #If instance size is not provided and var.insane_mode is false, lookup in this table.
@@ -360,7 +366,7 @@ locals {
 
   insane_mode_instance_size_map = {
     azure = "Standard_D3_v2",
-    aws   = "c5n.large",
+    aws   = "c5n.xlarge",
     gcp   = "n1-highcpu-4",
     oci   = "VM.Standard2.2",
     ali   = null
