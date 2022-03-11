@@ -261,7 +261,7 @@ variable "legacy_transit_vpc" {
 
 locals {
   cloud                 = lower(var.cloud)
-  name                  = length(var.name) > 0 ? var.name : local.default_name
+  name                  = coalesce(var.name, local.default_name)
   default_name          = lower(replace("avx-${var.region}-transit", " ", "-")) #Remove spaces from region names and force lowercase
   cidr                  = var.cidr
   cidrbits              = tonumber(split("/", local.cidr)[1])
@@ -284,7 +284,17 @@ locals {
     gcp   = "c",
   }
 
-  subnet = var.insane_mode && contains(["aws", "azure"], local.cloud) ? local.insane_mode_subnet : (local.cloud == "gcp" ? aviatrix_vpc.default.subnets[local.subnet_map[local.cloud]].cidr : aviatrix_vpc.default.public_subnets[local.subnet_map[local.cloud]].cidr)
+  subnet = (
+    var.insane_mode && contains(["aws", "azure"], local.cloud) ?
+    local.insane_mode_subnet
+    :
+    (local.cloud == "gcp" ?
+      aviatrix_vpc.default.subnets[local.subnet_map[local.cloud]].cidr
+      :
+      aviatrix_vpc.default.public_subnets[local.subnet_map[local.cloud]].cidr
+    )
+  )
+
   subnet_map = {
     azure = 2,
     aws   = 0
@@ -293,7 +303,17 @@ locals {
     ali   = 0,
   }
 
-  ha_subnet = var.insane_mode && contains(["aws", "azure"], local.cloud) ? local.ha_insane_mode_subnet : (local.cloud == "gcp" ? aviatrix_vpc.default.subnets[local.ha_subnet_map[local.cloud]].cidr : aviatrix_vpc.default.public_subnets[local.ha_subnet_map[local.cloud]].cidr)
+  ha_subnet = (
+    var.insane_mode && contains(["aws", "azure"], local.cloud) ?
+    local.ha_insane_mode_subnet
+    :
+    (local.cloud == "gcp" ?
+      aviatrix_vpc.default.subnets[local.ha_subnet_map[local.cloud]].cidr
+      :
+      aviatrix_vpc.default.public_subnets[local.ha_subnet_map[local.cloud]].cidr
+    )
+  )
+
   ha_subnet_map = {
     azure = 3,
     aws   = 1
@@ -309,7 +329,7 @@ locals {
   ha_zone = lookup(local.ha_zone_map, local.cloud, null)
   ha_zone_map = {
     azure = local.az2,
-    gcp   = local.cloud == "gcp" ? length(var.ha_region) > 0 ? "${var.ha_region}-${local.az2}" : "${var.region}-${local.az2}" : null
+    gcp   = local.cloud == "gcp" ? "${coalesce(var.ha_region, var.region)}${local.az2}" : null
   }
 
   insane_mode_az = var.insane_mode ? lookup(local.insane_mode_az_map, local.cloud, null) : null
@@ -322,10 +342,13 @@ locals {
     aws = local.cloud == "aws" ? "${var.region}${local.az2}" : null,
   }
 
-  is_china = can(regex("^cn-|^China ", var.region)) && contains(["aws", "azure"], local.cloud)     #If a region in Azure or AWS starts with China prefix, then results in true.
-  is_gov   = can(regex("^us-gov|^US Gov ", var.region)) && contains(["aws", "azure"], local.cloud) #If a region in Azure or AWS starts with Gov prefix, then results in true.
+  #Determine cloud_type
+  is_china    = can(regex("^cn-|^China ", var.region)) && contains(["aws", "azure"], local.cloud)             #If a region in Azure or AWS starts with China prefix, then results in true.
+  is_gov      = can(regex("^us-gov|^US Gov ", var.region)) && contains(["aws", "azure"], local.cloud)         #If a region in Azure or AWS starts with Gov prefix, then results in true.
+  check_china = local.is_china ? lookup(local.cloud_type_map_china, local.cloud, null) : null                 #Returns cloud type only if is_china is true, else null
+  check_gov   = local.is_gov ? lookup(local.cloud_type_map_gov, local.cloud, null) : null                     #Returns cloud type only if is_gov is true, else null
+  cloud_type  = coalesce(local.check_china, local.check_gov, lookup(local.cloud_type_map, local.cloud, null)) #Takes first found value
 
-  cloud_type = local.is_china ? lookup(local.cloud_type_map_china, local.cloud, null) : (local.is_gov ? lookup(local.cloud_type_map_gov, local.cloud, null) : lookup(local.cloud_type_map, local.cloud, null))
   cloud_type_map = {
     azure = 8,
     aws   = 1,
@@ -345,14 +368,12 @@ locals {
   }
 
   instance_size = (
-    length(var.instance_size) > 0 ? (
-      var.instance_size #If instance size is provided, use it.
-    )
-    :
-    (var.insane_mode || var.enable_transit_firenet ?
-      lookup(local.insane_mode_instance_size_map, local.cloud, null) #If instance size is not provided and var.insane_mode is true, lookup in this table.
+    coalesce(var.instance_size, (
+      var.insane_mode || var.enable_transit_firenet ?
+      lookup(local.insane_mode_instance_size_map, local.cloud, null) #If instance size is not provided and var.insane_mode or var.enable_transit_firenet is true, lookup in this table.
       :                                                              #
-      lookup(local.instance_size_map, local.cloud, null)             #If instance size is not provided and var.insane_mode is false, lookup in this table.
+      lookup(local.instance_size_map, local.cloud, null)             #If instance size is not provided and var.insane_mode and var.enable_transit_firenet are false, lookup in this table.
+      )
     )
   )
 
@@ -371,4 +392,6 @@ locals {
     oci   = "VM.Standard2.2",
     ali   = null
   }
+
+  single_az_mode = false #Needs to be implemented
 }
