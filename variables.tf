@@ -316,7 +316,7 @@ locals {
 
   ha_subnet_map = {
     azure = 3,
-    aws   = 1
+    aws   = 2
     gcp   = length(var.ha_region) > 0 ? 1 : 0
     oci   = 0,
     ali   = 1,
