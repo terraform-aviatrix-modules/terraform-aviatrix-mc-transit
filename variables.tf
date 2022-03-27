@@ -290,7 +290,7 @@ locals {
   ha_subnet = var.insane_mode && contains(["aws", "azure"], local.cloud) ? local.ha_insane_mode_subnet : (local.cloud == "gcp" ? aviatrix_vpc.default.subnets[local.ha_subnet_map[local.cloud]].cidr : aviatrix_vpc.default.public_subnets[local.ha_subnet_map[local.cloud]].cidr)
   ha_subnet_map = {
     azure = 3,
-    aws   = 1
+    aws   = 2
     gcp   = length(var.ha_region) > 0 ? 1 : 0
     oci   = 0,
     ali   = 1,
