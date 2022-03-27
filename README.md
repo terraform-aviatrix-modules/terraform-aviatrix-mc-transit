@@ -6,10 +6,13 @@ Deploys a VPC/VNET/VCN and Aviatrix Transit gateways.
 ### Compatibility
 Module version | Terraform version | Controller version | Terraform provider version
 :--- | :--- | :--- | :---
+v1.1.2 | 0.13-1.x | >= 6.6.5404 | 2.21.1-6.6.ga
 v1.1.1 | 0.13-1.x | >= 6.6.5404 | 2.21.1-6.6.ga
 v1.1.0 | 0.13-1.x | >= 6.6 | 2.21.0-6.6.ga
 v1.0.1 | 0.13-1.x | 6.4 - 6.5 | >= 2.19.0
 v1.0.0 | 0.13-1.x | 6.4 - 6.5 | >= 2.19.0
+
+v1.1.2 fixes an issue where the hagw was deployed in the wrong subnet. Applying it requires rebuilding the hagw. This is strongly recommended however, to make sure the transit can cope with a full AZ outage.
 
 ### Usage Examples
 See examples
