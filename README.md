@@ -7,6 +7,7 @@ Deploys a VPC/VNET/VCN and Aviatrix Transit gateways.
 Module version | Terraform version | Controller version | Terraform provider version
 :--- | :--- | :--- | :---
 v2.0.0 | 0.13-1.x | >= 6.6.5404 | 2.21.1-6.6.ga
+v1.1.2 | 0.13-1.x | >= 6.6.5404 | 2.21.1-6.6.ga
 v1.1.1 | 0.13-1.x | >= 6.6.5404 | 2.21.1-6.6.ga
 v1.1.0 | 0.13-1.x | >= 6.6 | 2.21.0-6.6.ga
 v1.0.1 | 0.13-1.x | 6.4 - 6.5 | >= 2.19.0
