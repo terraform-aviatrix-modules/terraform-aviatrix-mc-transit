@@ -310,7 +310,11 @@ locals {
     (local.cloud == "gcp" ?
       aviatrix_vpc.default.subnets[local.ha_subnet_map[local.cloud]].cidr
       :
-      aviatrix_vpc.default.public_subnets[local.ha_subnet_map[local.cloud]].cidr
+      (local.single_az_mode ?
+        local.subnet
+        :
+        aviatrix_vpc.default.public_subnets[local.ha_subnet_map[local.cloud]].cidr
+      )
     )
   )
 
@@ -393,5 +397,5 @@ locals {
     ali   = null
   }
 
-  single_az_mode = false #Needs to be implemented
+  single_az_mode = var.az1 == var.az2 ? true : false #Single AZ mode is not related in HA. It is meant for corner case scenario's where customers want to deploy the entire firenet in 1 AZ for traffic cost saving.
 }
