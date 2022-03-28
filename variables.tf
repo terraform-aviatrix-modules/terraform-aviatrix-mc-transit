@@ -299,7 +299,7 @@ locals {
     azure = 2,
     aws   = 0
     gcp   = 0,
-    oci   = 0,
+    oci   = 3,
     ali   = 0,
   }
 
@@ -322,7 +322,7 @@ locals {
     azure = 3,
     aws   = 2
     gcp   = length(var.ha_region) > 0 ? 1 : 0
-    oci   = 0,
+    oci   = 1,
     ali   = 1,
   }
 
