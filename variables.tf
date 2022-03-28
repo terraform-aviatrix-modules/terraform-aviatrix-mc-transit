@@ -398,4 +398,9 @@ locals {
   }
 
   single_az_mode = var.az1 == var.az2 ? true : false #Single AZ mode is not related in HA. It is meant for corner case scenario's where customers want to deploy the entire firenet in 1 AZ for traffic cost saving.
+
+  availability_domain    = local.cloud == "oci" ? aviatrix_vpc.default.availability_domains[0] : null
+  fault_domain           = local.cloud == "oci" ? aviatrix_vpc.default.fault_domains[0] : null
+  ha_availability_domain = var.ha_gw ? (local.cloud == "oci" ? aviatrix_vpc.default.availability_domains[1] : null) : null
+  ha_fault_domain        = var.ha_gw ? (local.cloud == "oci" ? aviatrix_vpc.default.fault_domains[1] : null) : null
 }

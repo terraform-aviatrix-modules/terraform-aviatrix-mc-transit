@@ -6,7 +6,7 @@ resource "aviatrix_vpc" "default" {
   account_name         = var.account
   name                 = local.name
   aviatrix_transit_vpc = contains(["ali"], local.cloud) || var.legacy_transit_vpc
-  aviatrix_firenet_vpc = contains(["aws", "azure"], local.cloud) && !var.legacy_transit_vpc
+  aviatrix_firenet_vpc = contains(["aws", "azure", "oci"], local.cloud) && !var.legacy_transit_vpc
   resource_group       = var.resource_group
 
   dynamic "subnets" {
@@ -64,10 +64,10 @@ resource "aviatrix_transit_gateway" "default" {
   customer_managed_keys            = var.customer_managed_keys
   tunnel_detection_time            = var.tunnel_detection_time
   tags                             = var.tags
-  availability_domain              = local.cloud == "oci" ? aviatrix_vpc.default.availability_domains[0] : null
-  fault_domain                     = local.cloud == "oci" ? aviatrix_vpc.default.fault_domains[0] : null
-  ha_availability_domain           = var.ha_gw ? (local.cloud == "oci" ? aviatrix_vpc.default.availability_domains[1] : null) : null
-  ha_fault_domain                  = var.ha_gw ? (local.cloud == "oci" ? aviatrix_vpc.default.fault_domains[1] : null) : null
+  availability_domain              = local.availability_domain
+  fault_domain                     = local.fault_domain
+  ha_availability_domain           = local.ha_availability_domain
+  ha_fault_domain                  = local.ha_fault_domain
   enable_multi_tier_transit        = var.enable_multi_tier_transit
   enable_active_standby_preemptive = var.enable_active_standby_preemptive
 
