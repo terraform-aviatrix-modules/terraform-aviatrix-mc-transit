@@ -22,7 +22,7 @@ output "mc_firenet_details" {
     fault_domain           = local.fault_domain,
     ha_availability_domain = local.ha_availability_domain,
     ha_fault_domain        = local.ha_fault_domain,
-    lan_vpc                = local.cloud == "gcp" ? aviatrix_vpc.lan_vpc[0] : null,
+    lan_vpc                = local.cloud == "gcp" && var.enable_transit_firenet ? aviatrix_vpc.lan_vpc[0] : null,
     region                 = var.region,
     ha_region              = var.ha_region,
     zone                   = local.zone,
