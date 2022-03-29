@@ -93,6 +93,17 @@ variable "ha_cidr" {
   }
 }
 
+variable "lan_cidr" {
+  description = "The CIDR range to be used for the LAN VPC for Firenet in GCP"
+  type        = string
+  default     = ""
+
+  validation {
+    condition     = var.lan_cidr != "" ? can(cidrnetmask(var.lan_cidr)) : true
+    error_message = "This does not like a valid CIDR."
+  }
+}
+
 variable "enable_firenet" {
   description = "Sign of readiness for FireNet connection"
   type        = bool
@@ -326,14 +337,16 @@ locals {
     ali   = 1,
   }
 
-  region = local.cloud == "gcp" ? "${var.region}-${local.az1}" : var.region
-
-  zone = local.cloud == "azure" ? local.az1 : null
+  zone = lookup(local.zone_map, local.cloud, null)
+  zone_map = {
+    azure = local.az1,
+    gcp   = local.cloud == "gcp" ? "${var.region}-${local.az1}" : null
+  }
 
   ha_zone = lookup(local.ha_zone_map, local.cloud, null)
   ha_zone_map = {
     azure = local.az2,
-    gcp   = local.cloud == "gcp" ? "${coalesce(var.ha_region, var.region)}${local.az2}" : null
+    gcp   = local.cloud == "gcp" ? "${coalesce(var.ha_region, var.region)}-${local.az2}" : null
   }
 
   insane_mode_az = var.insane_mode ? lookup(local.insane_mode_az_map, local.cloud, null) : null
@@ -393,7 +406,7 @@ locals {
     azure = "Standard_D3_v2",
     aws   = "c5n.xlarge",
     gcp   = "n1-highcpu-4",
-    oci   = "VM.Standard2.2",
+    oci   = "VM.Standard2.4",
     ali   = null
   }
 

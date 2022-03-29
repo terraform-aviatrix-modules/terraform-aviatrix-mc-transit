@@ -1,4 +1,4 @@
-# Aviatrix Spoke VPC
+# Aviatrix Transit VPC
 resource "aviatrix_vpc" "default" {
   cloud_type           = local.cloud_type
   region               = local.cloud == "gcp" ? null : var.region
@@ -28,16 +28,32 @@ resource "aviatrix_vpc" "default" {
   }
 }
 
+# LAN VPC 
+resource "aviatrix_vpc" "lan_vpc" {
+  count                = local.cloud == "gcp" && var.enable_transit_firenet ? 1 : 0 #Only create for GCP and when firenet is enabled
+  cloud_type           = 4
+  account_name         = var.account
+  name                 = "${local.name}-lan"
+  aviatrix_transit_vpc = false
+  aviatrix_firenet_vpc = false
+
+  subnets {
+    name   = "${local.name}-lan"
+    cidr   = var.lan_cidr
+    region = var.region
+  }
+}
+
 #Transit GW
 resource "aviatrix_transit_gateway" "default" {
   cloud_type                       = local.cloud_type
-  vpc_reg                          = local.region
+  vpc_reg                          = local.cloud == "gcp" ? local.zone : var.region
   gw_name                          = local.name
   gw_size                          = local.instance_size
   vpc_id                           = local.cloud == "oci" ? aviatrix_vpc.default.name : aviatrix_vpc.default.vpc_id
   account_name                     = var.account
   subnet                           = local.subnet
-  zone                             = local.zone
+  zone                             = local.cloud == "azure" ? local.zone : null
   ha_subnet                        = var.ha_gw ? local.ha_subnet : null
   ha_gw_size                       = var.ha_gw ? local.instance_size : null
   ha_zone                          = var.ha_gw ? local.ha_zone : null
@@ -53,9 +69,6 @@ resource "aviatrix_transit_gateway" "default" {
   single_az_ha                     = var.single_az_ha
   single_ip_snat                   = var.single_ip_snat
   enable_advertise_transit_cidr    = var.enable_advertise_transit_cidr
-  enable_firenet                   = var.enable_firenet
-  enable_transit_firenet           = var.enable_transit_firenet
-  enable_egress_transit_firenet    = var.enable_egress_transit_firenet
   bgp_polling_time                 = var.bgp_polling_time
   bgp_ecmp                         = var.bgp_ecmp
   local_as_number                  = var.local_as_number
@@ -70,6 +83,15 @@ resource "aviatrix_transit_gateway" "default" {
   ha_fault_domain                  = local.ha_fault_domain
   enable_multi_tier_transit        = var.enable_multi_tier_transit
   enable_active_standby_preemptive = var.enable_active_standby_preemptive
+
+  #Firenet Settings
+  enable_firenet                = var.enable_firenet
+  enable_transit_firenet        = var.enable_transit_firenet
+  enable_egress_transit_firenet = var.enable_egress_transit_firenet
+
+  #GCP Firenet settings
+  lan_vpc_id         = var.enable_transit_firenet && local.cloud == "gcp" ? aviatrix_vpc.lan_vpc[0].name : null
+  lan_private_subnet = var.enable_transit_firenet && local.cloud == "gcp" ? aviatrix_vpc.lan_vpc[0].subnets[0].cidr : null
 
   dynamic "bgp_lan_interfaces" {
     for_each = var.bgp_lan_interfaces
