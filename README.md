@@ -13,7 +13,7 @@ v1.1.0 | 0.13-1.x | >= 6.6 | 2.21.0-6.6.ga
 v1.0.1 | 0.13-1.x | 6.4 - 6.5 | >= 2.19.0
 v1.0.0 | 0.13-1.x | 6.4 - 6.5 | >= 2.19.0
 
-Warning: Upgrading from v1.x to v2.x has breaking changes! This was done to provide compatibility with the mc-firenet module. Check v2.0.0 release notes for more details.
+Warning: Upgrading from v1.x to v2.x has breaking changes! This was done to provide compatibility with the [mc-firenet module](https://github.com/terraform-aviatrix-modules/terraform-aviatrix-mc-firenet). Check [release notes](RELEASE_NOTES.md) for more details.
 
 ### Usage Examples
 See examples
