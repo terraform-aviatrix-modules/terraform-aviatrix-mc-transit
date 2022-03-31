@@ -31,7 +31,7 @@ module "transit_ha_oci" {
 }
 
 resource "test_assertions" "public_ip_non_ha" {
-  component = "public_ip_non_ha"
+  component = "public_ip_non_ha_oci"
 
   check "gw_public_ip" {
     description = "GW has public IP"
@@ -40,7 +40,7 @@ resource "test_assertions" "public_ip_non_ha" {
 }
 
 resource "test_assertions" "public_ip_ha" {
-  component = "public_ip_ha"
+  component = "public_ip_ha_oci"
 
   check "gw_public_ip" {
     description = "GW has public IP"
@@ -52,4 +52,3 @@ resource "test_assertions" "public_ip_ha" {
     condition   = can(cidrnetmask("${module.transit_ha_oci.transit_gateway.ha_eip}/32"))
   }
 }
-

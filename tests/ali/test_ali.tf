@@ -31,7 +31,7 @@ module "transit_ha_ali" {
 }
 
 resource "test_assertions" "cloud_type_non_ha" {
-  component = "cloud_type_non_ha"
+  component = "cloud_type_non_ha_ali"
 
   equal "cloud_type_non_ha" {
     description = ""
@@ -41,7 +41,7 @@ resource "test_assertions" "cloud_type_non_ha" {
 }
 
 resource "test_assertions" "cloud_type_ha" {
-  component = "cloud_type_ha"
+  component = "cloud_type_ha_ali"
 
   equal "cloud_type_ha" {
     description = ""

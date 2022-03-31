@@ -31,7 +31,7 @@ module "transit_ha_azure" {
 }
 
 resource "test_assertions" "cloud_type_non_ha" {
-  component = "cloud_type_non_ha"
+  component = "cloud_type_non_ha_azure"
 
   equal "cloud_type_non_ha" {
     description = "Module output is equal to check map."
@@ -41,7 +41,7 @@ resource "test_assertions" "cloud_type_non_ha" {
 }
 
 resource "test_assertions" "cloud_type_ha" {
-  component = "cloud_type_ha"
+  component = "cloud_type_ha_azure"
 
   equal "cloud_type_ha" {
     description = "Module output is equal to check map."
