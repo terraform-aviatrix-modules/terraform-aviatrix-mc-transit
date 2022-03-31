@@ -57,7 +57,7 @@ resource "aviatrix_transit_gateway" "default" {
   ha_subnet                        = var.ha_gw ? local.ha_subnet : null
   ha_gw_size                       = var.ha_gw ? local.instance_size : null
   ha_zone                          = var.ha_gw ? local.ha_zone : null
-  connected_transit                = var.connected_transit
+  connected_transit                = var.enable_egress_transit_firenet ? false : var.connected_transit
   enable_hybrid_connection         = var.hybrid_connection
   bgp_manual_spoke_advertise_cidrs = var.bgp_manual_spoke_advertise_cidrs
   enable_learned_cidrs_approval    = var.learned_cidr_approval
