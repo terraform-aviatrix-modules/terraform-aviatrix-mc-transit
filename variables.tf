@@ -253,6 +253,12 @@ variable "enable_active_standby_preemptive" {
   default     = false
 }
 
+variable "enable_s2c_rx_balancing" {
+  description = "Allows to toggle the S2C receive packet CPU re-balancing on transit gateway."
+  type        = bool
+  default     = false
+}
+
 locals {
   cloud                 = lower(var.cloud)
   name                  = length(var.name) > 0 ? var.name : local.default_name

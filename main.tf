@@ -70,6 +70,7 @@ resource "aviatrix_transit_gateway" "default" {
   ha_fault_domain                  = var.ha_gw ? (local.cloud == "oci" ? aviatrix_vpc.default.fault_domains[1] : null) : null
   enable_multi_tier_transit        = var.enable_multi_tier_transit
   enable_active_standby_preemptive = var.enable_active_standby_preemptive
+  enable_s2c_rx_balancing          = var.enable_s2c_rx_balancing
 
   dynamic "bgp_lan_interfaces" {
     for_each = var.bgp_lan_interfaces
