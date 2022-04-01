@@ -83,6 +83,7 @@ resource "aviatrix_transit_gateway" "default" {
   ha_fault_domain                  = local.ha_fault_domain
   enable_multi_tier_transit        = var.enable_multi_tier_transit
   enable_active_standby_preemptive = var.enable_active_standby_preemptive
+  enable_s2c_rx_balancing          = var.enable_s2c_rx_balancing
 
   #Firenet Settings
   enable_firenet                = var.enable_firenet

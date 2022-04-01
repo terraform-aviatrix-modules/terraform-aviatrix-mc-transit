@@ -11,6 +11,13 @@ Previously, this module would create a [transit VPC](https://registry.terraform.
 legacy_vpc = true
 ```
 
+## v1.1.3
+
+### Add support for provider version 2.21.2.
+
+### Add support for enable_s2c_rx_balancing
+Allows to toggle the S2C receive packet CPU re-balancing on transit gateway.
+
 ## v1.1.2
 
 ### Fix wrong subnet for HAGW

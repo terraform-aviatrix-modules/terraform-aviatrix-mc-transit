@@ -270,6 +270,12 @@ variable "legacy_transit_vpc" {
   default     = false
 }
 
+variable "enable_s2c_rx_balancing" {
+  description = "Allows to toggle the S2C receive packet CPU re-balancing on transit gateway."
+  type        = bool
+  default     = false
+}
+
 locals {
   cloud                 = lower(var.cloud)
   name                  = coalesce(var.name, local.default_name)
