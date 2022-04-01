@@ -50,7 +50,7 @@ resource "aviatrix_transit_gateway" "default" {
   vpc_reg                          = local.cloud == "gcp" ? local.zone : var.region
   gw_name                          = local.name
   gw_size                          = local.instance_size
-  vpc_id                           = local.cloud == "oci" ? aviatrix_vpc.default.name : aviatrix_vpc.default.vpc_id
+  vpc_id                           = aviatrix_vpc.default.vpc_id
   account_name                     = var.account
   subnet                           = local.subnet
   zone                             = local.cloud == "azure" ? local.zone : null
