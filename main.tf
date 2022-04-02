@@ -87,7 +87,7 @@ resource "aviatrix_transit_gateway" "default" {
 
   #Firenet Settings
   enable_firenet                = var.enable_firenet
-  enable_transit_firenet        = var.enable_transit_firenet
+  enable_transit_firenet        = local.enable_transit_firenet
   enable_egress_transit_firenet = var.enable_egress_transit_firenet
 
   #GCP Firenet settings

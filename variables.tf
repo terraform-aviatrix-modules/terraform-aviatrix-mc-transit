@@ -422,4 +422,6 @@ locals {
   fault_domain           = local.cloud == "oci" ? aviatrix_vpc.default.fault_domains[0] : null
   ha_availability_domain = var.ha_gw ? (local.cloud == "oci" ? aviatrix_vpc.default.availability_domains[1] : null) : null
   ha_fault_domain        = var.ha_gw ? (local.cloud == "oci" ? aviatrix_vpc.default.fault_domains[1] : null) : null
+
+  enable_transit_firenet = var.enable_transit_firenet || var.enable_egress_transit_firenet #Automatically toggle transit firenet true, if egress transit firenet is enabled
 }
