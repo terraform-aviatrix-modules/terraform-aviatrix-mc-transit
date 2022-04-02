@@ -49,3 +49,35 @@ resource "test_assertions" "cloud_type_ha" {
     want        = 1
   }
 }
+
+resource "test_assertions" "subnet_allocation_non_ha" {
+  component = "subnet_allocation_non_ha_aws"
+
+  equal "subnet_allocation_gw" {
+    description = "Check GA is in correct subnet."
+    got         = module.transit_non_ha_aws.transit_gateway.subnet
+    want        = module.transit_non_ha_aws.vpc.public_subnets[0].cidr
+  }
+
+  equal "subnet_allocation_hagw" {
+    description = "Check HAGW is in correct subnet."
+    got         = module.transit_non_ha_aws.transit_gateway.ha_subnet
+    want        = null
+  }
+}
+
+resource "test_assertions" "subnet_allocation_ha" {
+  component = "subnet_allocation_ha_aws"
+
+  equal "subnet_allocation_gw" {
+    description = "Check GA is in correct subnet."
+    got         = module.transit_ha_aws.transit_gateway.subnet
+    want        = module.transit_ha_aws.vpc.public_subnets[0].cidr
+  }
+
+  equal "subnet_allocation_hagw" {
+    description = "Check HAGA is in correct subnet."
+    got         = module.transit_ha_aws.transit_gateway.ha_subnet
+    want        = module.transit_ha_aws.vpc.public_subnets[2].cidr
+  }
+}
