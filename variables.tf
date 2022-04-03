@@ -392,7 +392,7 @@ locals {
 
   instance_size = (
     coalesce(var.instance_size, (
-      var.insane_mode || var.enable_transit_firenet ?
+      var.insane_mode || local.enable_transit_firenet ?
       lookup(local.insane_mode_instance_size_map, local.cloud, null) #If instance size is not provided and var.insane_mode or var.enable_transit_firenet is true, lookup in this table.
       :                                                              #
       lookup(local.instance_size_map, local.cloud, null)             #If instance size is not provided and var.insane_mode and var.enable_transit_firenet are false, lookup in this table.
