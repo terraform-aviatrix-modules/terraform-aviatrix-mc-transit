@@ -12,6 +12,7 @@ variable "name" {
   description = "Name for this transit VPC and it's gateways"
   type        = string
   default     = ""
+  nullable    = false
 
   validation {
     condition     = length(var.name) <= 50
@@ -33,24 +34,28 @@ variable "connected_transit" {
   description = "Set to false to disable connected transit."
   type        = bool
   default     = true
+  nullable    = false
 }
 
 variable "hybrid_connection" {
   description = "Set to true to prepare Aviatrix transit for TGW connection."
   type        = bool
   default     = false
+  nullable    = false
 }
 
 variable "bgp_manual_spoke_advertise_cidrs" {
   description = "Define a list of CIDRs that should be advertised via BGP."
   type        = string
   default     = ""
+  nullable    = false
 }
 
 variable "learned_cidr_approval" {
   description = "Set to true to enable learned CIDR approval."
   type        = string
   default     = "false"
+  nullable    = false
 }
 
 variable "learned_cidrs_approval_mode" {
@@ -63,18 +68,21 @@ variable "enable_segmentation" {
   description = "Switch to true to enable transit segmentation"
   type        = bool
   default     = false
+  nullable    = false
 }
 
 variable "ha_region" {
   description = "Secondary GCP region where subnet and HA Aviatrix Transit Gateway will be created"
   type        = string
   default     = ""
+  nullable    = false
 }
 
 variable "cidr" {
   description = "The CIDR range to be used for the VPC"
   type        = string
   default     = ""
+  nullable    = false
 
   validation {
     condition     = var.cidr != "" ? can(cidrnetmask(var.cidr)) : true
@@ -86,6 +94,7 @@ variable "ha_cidr" {
   description = "CIDR of the HA GCP subnet"
   type        = string
   default     = ""
+  nullable    = false
 
   validation {
     condition     = var.ha_cidr != "" ? can(cidrnetmask(var.ha_cidr)) : true
@@ -97,6 +106,7 @@ variable "lan_cidr" {
   description = "The CIDR range to be used for the LAN VPC for Firenet in GCP"
   type        = string
   default     = ""
+  nullable    = false
 
   validation {
     condition     = var.lan_cidr != "" ? can(cidrnetmask(var.lan_cidr)) : true
@@ -108,42 +118,49 @@ variable "enable_firenet" {
   description = "Sign of readiness for FireNet connection"
   type        = bool
   default     = false
+  nullable    = false
 }
 
 variable "enable_transit_firenet" {
   description = "Sign of readiness for Transit FireNet connection"
   type        = bool
   default     = false
+  nullable    = false
 }
 
 variable "enable_egress_transit_firenet" {
   description = "Enable Egress Transit FireNet"
   type        = bool
   default     = false
+  nullable    = false
 }
 
 variable "bgp_polling_time" {
   description = "BGP route polling time. Unit is in seconds"
   type        = string
   default     = "50"
+  nullable    = false
 }
 
 variable "bgp_ecmp" {
   description = "Enable Equal Cost Multi Path (ECMP) routing for the next hop"
   type        = bool
   default     = false
+  nullable    = false
 }
 
 variable "enable_multi_tier_transit" {
   description = "Set to true to enable multi tier transit."
   type        = bool
   default     = false
+  nullable    = false
 }
 
 variable "enable_advertise_transit_cidr" {
   description = "Switch to enable/disable advertise transit VPC network CIDR for a VGW connection"
   type        = bool
   default     = false
+  nullable    = false
 }
 
 variable "local_as_number" {
@@ -156,6 +173,7 @@ variable "enable_bgp_over_lan" {
   description = "Enable BGP over LAN. Creates eth4 for integration with SDWAN for example"
   type        = bool
   default     = false
+  nullable    = false
 }
 
 variable "account" {
@@ -167,54 +185,63 @@ variable "instance_size" {
   description = "Instance size for the Aviatrix gateways"
   type        = string
   default     = ""
+  nullable    = false
 }
 
 variable "ha_gw" {
   description = "Boolean to determine if module will be deployed in HA or single mode"
   type        = bool
   default     = true
+  nullable    = false
 }
 
 variable "insane_mode" {
   description = "Set to true to enable Aviatrix high performance encryption."
   type        = bool
   default     = false
+  nullable    = false
 }
 
 variable "az1" {
   description = "Concatenates with region to form az names. e.g. eu-central-1a. Only used for insane mode"
   type        = string
   default     = ""
+  nullable    = false
 }
 
 variable "az2" {
   description = "Concatenates with region to form az names. e.g. eu-central-1b. Only used for insane mode"
   type        = string
   default     = ""
+  nullable    = false
 }
 
 variable "az_support" {
   description = "Set to true if the Azure region supports AZ's"
   type        = bool
   default     = true
+  nullable    = false
 }
 
 variable "single_az_ha" {
   description = "Set to true if Controller managed Gateway HA is desired"
   type        = bool
   default     = true
+  nullable    = false
 }
 
 variable "single_ip_snat" {
   description = "Specify whether to enable Source NAT feature in single_ip mode on the gateway or not. Please disable AWS NAT instance before enabling this feature. Currently only supports AWS(1) and AZURE(8). Valid values: true, false."
   type        = bool
   default     = false
+  nullable    = false
 }
 
 variable "enable_encrypt_volume" {
   description = "Enable EBS volume encryption for Gateway. Only supports AWS and AWSGOV provider. Valid values: true, false. Default value: false"
   type        = bool
   default     = false
+  nullable    = false
 }
 
 variable "customer_managed_keys" {
@@ -250,30 +277,35 @@ variable "bgp_lan_interfaces" {
   description = "Interfaces to run BGP protocol on top of the ethernet interface."
   type        = list(any)
   default     = []
+  nullable    = false
 }
 
 variable "ha_bgp_lan_interfaces" {
   description = "Interfaces to run BGP protocol on top of the ethernet interface."
   type        = list(any)
   default     = []
+  nullable    = false
 }
 
 variable "enable_active_standby_preemptive" {
   description = "Enables Preemptive Mode for Active-Standby. Available only with BGP enabled, HA enabled and Active-Standby enabled."
   type        = bool
   default     = false
+  nullable    = false
 }
 
 variable "legacy_transit_vpc" {
   description = "Retains pre v2.x behavior of the module, where it creates a transit VPC instead of firenet VPC in AWS." #Deliberately unpublished in readme
   type        = bool
   default     = false
+  nullable    = false
 }
 
 variable "enable_s2c_rx_balancing" {
   description = "Allows to toggle the S2C receive packet CPU re-balancing on transit gateway."
   type        = bool
   default     = false
+  nullable    = false
 }
 
 locals {
