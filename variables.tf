@@ -334,7 +334,7 @@ locals {
   }
 
   subnet = (
-    var.insane_mode && contains(["aws", "azure"], local.cloud) ?
+    var.insane_mode && contains(["aws", "azure", "oci"], local.cloud) ?
     local.insane_mode_subnet
     :
     (local.cloud == "gcp" ?
