@@ -1,5 +1,14 @@
 # terraform-aviatrix-mc-transit release notes
 
+## v2.0.1
+This version of the module was released to support usage in combination with the [mc-transit-deployment-framework module](https://github.com/terraform-aviatrix-modules/terraform-aviatrix-mc-transit-deployment-framework).
+
+### Input variables non-nullable
+Most input variables that have a default value, have been set to be non-nullable as of this release. This allows parent or root modules calling this module to set arguments to null without changing the internal behavior of the module. This should cause no impact to existing usage.
+
+### Fix OCI Insane mode bug
+Due to internal module logic, the wrong subnet was selected for insane mode, when using this module in OCI.
+
 ## v2.0.0
 This version of the module was released to support usage in combination with the [mc-firenet module](https://github.com/terraform-aviatrix-modules/terraform-aviatrix-mc-firenet).
 Some behaviors had to be adjusted, in order to extend this module with the mc-firenet module.
