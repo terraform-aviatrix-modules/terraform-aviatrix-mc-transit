@@ -311,7 +311,7 @@ variable "enable_s2c_rx_balancing" {
 locals {
   cloud                 = lower(var.cloud)
   name                  = coalesce(var.name, local.default_name)
-  default_name          = lower(replace("avx-${var.region}-transit", " ", "-")) #Remove spaces from region names and force lowercase
+  default_name          = format("%s%s", lower(replace("avx-${var.region}", " ", "-")), (var.enable_egress_transit_firenet ? "-egress" : "-transit")) #Remove spaces from region names and force lowercase. Add egress for egress transits.
   cidr                  = var.cidr
   cidrbits              = tonumber(split("/", local.cidr)[1])
   newbits               = 26 - local.cidrbits
