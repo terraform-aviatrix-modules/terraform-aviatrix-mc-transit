@@ -1,5 +1,13 @@
 # terraform-aviatrix-mc-transit release notes
 
+## v2.0.2
+
+### Change default name for egress transit
+When creating a transit gateway with enable_egress_transit_firenet enabled, the transit name will end in -egress in stead of -transit. This is done to simplify dual transit firenet deployments, as multipole transits in a ingle region would by default otherwise collide with the same name. If this behavior is underdesired for your deployment, you can negate it by manually setting the name in the name argument.
+
+### Adding option to differciate naming between transit gateway and VNET/VPC/VCN
+By default, the same name is used for VPC and transit gateway. This behavior can now be overridden by setting the gw_name argument. Default behavior has not changed.
+
 ## v2.0.1
 This version of the module was released to support usage in combination with the [mc-transit-deployment-framework module](https://github.com/terraform-aviatrix-modules/terraform-aviatrix-mc-transit-deployment-framework).
 

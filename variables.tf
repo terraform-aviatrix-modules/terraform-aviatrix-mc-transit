@@ -25,6 +25,23 @@ variable "name" {
   }
 }
 
+variable "gw_name" {
+  description = "Name for the transit gateway"
+  type        = string
+  default     = ""
+  nullable    = false
+
+  validation {
+    condition     = length(var.gw_name) <= 50
+    error_message = "Name is too long. Max length is 50 characters."
+  }
+
+  validation {
+    condition     = can(regex("^[a-zA-Z0-9-_]*$", var.gw_name))
+    error_message = "For the transit name value only a-z, A-Z, 0-9 and hyphens and underscores are allowed."
+  }
+}
+
 variable "region" {
   description = "The region to deploy this module in"
   type        = string
@@ -311,6 +328,7 @@ variable "enable_s2c_rx_balancing" {
 locals {
   cloud                 = lower(var.cloud)
   name                  = coalesce(var.name, local.default_name)
+  gw_name               = coalesce(var.gw_name, local.name)
   default_name          = format("%s%s", lower(replace("avx-${var.region}", " ", "-")), (var.enable_egress_transit_firenet ? "-egress" : "-transit")) #Remove spaces from region names and force lowercase. Add egress for egress transits.
   cidr                  = var.cidr
   cidrbits              = tonumber(split("/", local.cidr)[1])

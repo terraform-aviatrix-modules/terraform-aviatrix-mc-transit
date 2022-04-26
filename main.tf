@@ -48,7 +48,7 @@ resource "aviatrix_vpc" "lan_vpc" {
 resource "aviatrix_transit_gateway" "default" {
   cloud_type                       = local.cloud_type
   vpc_reg                          = local.cloud == "gcp" ? local.zone : var.region
-  gw_name                          = local.name
+  gw_name                          = local.gw_name
   gw_size                          = local.instance_size
   vpc_id                           = aviatrix_vpc.default.vpc_id
   account_name                     = var.account
