@@ -1,5 +1,10 @@
 # terraform-aviatrix-mc-transit release notes
 
+## v2.0.3
+
+### Improved Azure GOV and DoD region detection
+Previously regex mismatched the regions, resulting in the wrong cloud type.
+
 ## v2.0.2
 
 ### Change default name for egress transit
@@ -27,6 +32,11 @@ Previously, this module would create a [transit VPC](https://registry.terraform.
 ```
 legacy_vpc = true
 ```
+
+## v1.1.4
+
+### Improved Azure GOV and DoD region detection
+Previously regex mismatched the regions, resulting in the wrong cloud type.
 
 ## v1.1.3
 
