@@ -9,6 +9,8 @@ terraform {
   }
 }
 
+provider "aviatrix" {}
+
 module "transit_non_ha_gcp" {
   source = "../.."
 
