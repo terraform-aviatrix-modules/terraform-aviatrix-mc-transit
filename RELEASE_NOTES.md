@@ -1,5 +1,10 @@
 # terraform-aviatrix-mc-transit release notes
 
+## v1.1.4
+
+### Improved Azure GOV and DoD region detection
+Previously regex mismatched the regions, resulting in the wrong cloud type.
+
 ## v1.1.3
 
 ### Add support for provider version 2.21.2.
