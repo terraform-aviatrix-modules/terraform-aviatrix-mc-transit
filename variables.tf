@@ -325,6 +325,17 @@ variable "enable_s2c_rx_balancing" {
   nullable    = false
 }
 
+variable "rx_queue_size" {
+  description = "Gateway ethernet interface RX queue size. Once set, can't be deleted or disabled."
+  type        = string
+  default     = null
+
+  validation {
+    condition     = var.rx_queue_size != null ? contains(["1K", "2K", "4K", "8K", "16K"], var.rx_queue_size) : true
+    error_message = "Expected rx_queue_size to be one of [1K 2K 4K 8K 16K]."
+  }
+}
+
 locals {
   cloud                 = lower(var.cloud)
   name                  = coalesce(var.name, local.default_name)

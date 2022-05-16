@@ -1,5 +1,12 @@
 # terraform-aviatrix-mc-transit release notes
 
+## v2.1.0
+
+### Add support for controller version 6.7 and provider version 2.22.0.
+
+### Add support for rx_queue_size
+This option allows you to increase the receive buffer size. This may be required in scenarios where traffic is particularly bursty.
+
 ## v2.0.3
 
 ### Improved Azure GOV and DoD region detection
