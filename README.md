@@ -6,7 +6,7 @@ Deploys a VPC/VNET/VCN and Aviatrix Transit gateways.
 ### Compatibility
 Module version | Terraform version | Controller version | Terraform provider version
 :--- | :--- | :--- | :---
-v2.1.1 | >= 1.1.0 | >= 6.7.1186 | ~>2.22.0
+v2.1.2 | >= 1.1.0 | >= 6.7.1186 | ~>2.22.0
 
 Check [release notes](https://github.com/terraform-aviatrix-modules/terraform-aviatrix-mc-transit/blob/master/RELEASE_NOTES.md) for more details.
 Check [Compatibility list](https://github.com/terraform-aviatrix-modules/terraform-aviatrix-mc-transit/blob/master/COMPATIBILITY.md) for older versions.
@@ -34,7 +34,7 @@ The following variables are optional:
 Key | Supported_CSP's |  Default value | Description
 :-- | --: | :-- | :--
 availability_domain | <img src="https://github.com/terraform-aviatrix-modules/terraform-aviatrix-mc-transit/blob/main/img/oci.png?raw=true" title="OCI"> | | Availability domain in OCI.
-az_support | <img src="https://github.com/terraform-aviatrix-modules/terraform-aviatrix-mc-transit/blob/main/img/azure.png?raw=true" title="Azure"> | true | Set to false if the region does not support Availability Zones.
+az_support | <img src="https://github.com/terraform-aviatrix-modules/terraform-aviatrix-mc-transit/blob/main/img/azure.png?raw=true" title="Azure"> | true | Set to false if the region does not support Availability Zones. (Automatically set to false for gov and dod regions)
 az1 | <img src="https://github.com/terraform-aviatrix-modules/terraform-aviatrix-mc-transit/blob/main/img/aws.png?raw=true" title="AWS"><br><img src="https://github.com/terraform-aviatrix-modules/terraform-aviatrix-mc-transit/blob/main/img/azure.png?raw=true" title="Azure"><br><img src="https://github.com/terraform-aviatrix-modules/terraform-aviatrix-mc-transit/blob/main/img/gcp.png?raw=true" title="GCP"> | a<br>az-1<br>b | Concatenates with region to form az names. e.g. eu-central-1a. Only used for insane mode and AWS GWLB.
 az2 | <img src="https://github.com/terraform-aviatrix-modules/terraform-aviatrix-mc-transit/blob/main/img/aws.png?raw=true" title="AWS"><br><img src="https://github.com/terraform-aviatrix-modules/terraform-aviatrix-mc-transit/blob/main/img/azure.png?raw=true" title="Azure"><br><img src="https://github.com/terraform-aviatrix-modules/terraform-aviatrix-mc-transit/blob/main/img/gcp.png?raw=true" title="GCP"> | b<br>az-2<br>c | Concatenates with region to form az names. e.g. eu-central-1b.  Only used for insane mode and AWS GWLB. If az1 and az2 are equal. Single AZ mode (deploy everyting in 1 AZ) is triggered.
 [bgp_ecmp](https://registry.terraform.io/providers/AviatrixSystems/aviatrix/latest/docs/resources/aviatrix_transit_gateway#bgp_ecmp) |<img src="https://github.com/terraform-aviatrix-modules/terraform-aviatrix-mc-transit/blob/main/img/aws.png?raw=true" title="AWS"> <img src="https://github.com/terraform-aviatrix-modules/terraform-aviatrix-mc-transit/blob/main/img/azure.png?raw=true" title="Azure"> <img src="https://github.com/terraform-aviatrix-modules/terraform-aviatrix-mc-transit/blob/main/img/gcp.png?raw=true" title="GCP"> <img src="https://github.com/terraform-aviatrix-modules/terraform-aviatrix-mc-transit/blob/main/img/oci.png?raw=true" title="OCI"> <img src="https://github.com/terraform-aviatrix-modules/terraform-aviatrix-mc-transit/blob/main/img/alibaba.png?raw=true" title="Alibaba"> |  false | Enable Equal Cost Multi Path (ECMP) routing for the next hop
