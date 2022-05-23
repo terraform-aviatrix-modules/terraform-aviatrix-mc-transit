@@ -11,7 +11,7 @@ v2.1.1 | >= 1.1.0 | >= 6.7.1186 | ~>2.22.0
 Check [release notes](https://github.com/terraform-aviatrix-modules/terraform-aviatrix-mc-transit/blob/master/RELEASE_NOTES.md) for more details.
 Check [Compatibility list](https://github.com/terraform-aviatrix-modules/terraform-aviatrix-mc-transit/blob/master/COMPATIBILITY.md) for older versions.
 
-Warning: Upgrading from v1.x to v2.x has breaking changes! This was done to provide compatibility with the [mc-firenet module](https://github.com/terraform-aviatrix-modules/terraform-aviatrix-mc-firenet). Check [release notes](RELEASE_NOTES.md) for more details.
+Warning: Upgrading from v1.x to v2.x has breaking changes! This was done to provide compatibility with the [mc-firenet module](https://github.com/terraform-aviatrix-modules/terraform-aviatrix-mc-firenet). Check [release notes](https://github.com/terraform-aviatrix-modules/terraform-aviatrix-mc-transit/blob/master/RELEASE_NOTES.md) for more details.
 
 ### Usage Examples
 See [examples](https://github.com/terraform-aviatrix-modules/terraform-aviatrix-mc-transit/tree/main/examples)
