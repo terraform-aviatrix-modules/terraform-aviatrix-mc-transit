@@ -336,6 +336,30 @@ variable "rx_queue_size" {
   }
 }
 
+variable "availability_domain" {
+  description = "Availability domain in OCI."
+  type        = string
+  default     = null
+}
+
+variable "ha_availability_domain" {
+  description = "Availability domain in OCI for HA GW."
+  type        = string
+  default     = null
+}
+
+variable "fault_domain" {
+  description = "Fault domain in OCI."
+  type        = string
+  default     = null
+}
+
+variable "ha_fault_domain" {
+  description = "Fault domain in OCI for HA GW."
+  type        = string
+  default     = null
+}
+
 locals {
   cloud                 = lower(var.cloud)
   name                  = coalesce(var.name, local.default_name)
@@ -477,12 +501,18 @@ locals {
     ali   = null
   }
 
-  single_az_mode = local.az1 == local.az2 && contains(["aws", "azure"], lower(var.cloud)) #Single AZ mode is not related in HA. It is meant for corner case scenario's where customers want to deploy the entire firenet in 1 AZ for traffic cost saving.
+  single_az_mode = local.az1 == local.az2 && contains(["aws", "azure"], lower(var.cloud)) #Single AZ mode is not related to HA. It is meant for corner case scenario's where customers want to deploy the entire firenet in 1 AZ for traffic cost saving.
 
-  availability_domain    = local.cloud == "oci" ? aviatrix_vpc.default.availability_domains[0] : null
-  fault_domain           = local.cloud == "oci" ? aviatrix_vpc.default.fault_domains[0] : null
-  ha_availability_domain = var.ha_gw ? (local.cloud == "oci" ? aviatrix_vpc.default.availability_domains[1] : null) : null
-  ha_fault_domain        = var.ha_gw ? (local.cloud == "oci" ? aviatrix_vpc.default.fault_domains[1] : null) : null
+  #Determine OCI Availability domains
+  default_availability_domain    = local.cloud == "oci" ? aviatrix_vpc.default.availability_domains[0] : null
+  default_fault_domain           = local.cloud == "oci" ? aviatrix_vpc.default.fault_domains[0] : null
+  default_ha_availability_domain = var.ha_gw && local.cloud == "oci" ? (try(aviatrix_vpc.default.availability_domains[1], aviatrix_vpc.default.availability_domains[0])) : null
+  default_ha_fault_domain        = var.ha_gw && local.cloud == "oci" ? aviatrix_vpc.default.fault_domains[1] : null
+
+  availability_domain    = var.availability_domain != null ? var.availability_domain : local.default_availability_domain
+  ha_availability_domain = var.ha_availability_domain != null ? var.ha_availability_domain : local.default_ha_availability_domain
+  fault_domain           = var.fault_domain != null ? var.fault_domain : local.default_fault_domain
+  ha_fault_domain        = var.ha_fault_domain != null ? var.ha_fault_domain : local.default_ha_fault_domain
 
   enable_transit_firenet = var.enable_transit_firenet || var.enable_egress_transit_firenet #Automatically toggle transit firenet true, if egress transit firenet is enabled
 }

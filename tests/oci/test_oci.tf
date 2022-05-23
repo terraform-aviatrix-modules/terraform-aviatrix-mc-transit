@@ -32,6 +32,16 @@ module "transit_ha_oci" {
   account = "OCI"
 }
 
+module "transit_ha_oci_single_ad" {
+  source = "../.."
+
+  cloud   = "oci"
+  name    = "transit-ha-oci-single-ad"
+  region  = "eu-milan-1"
+  cidr    = "10.3.0.0/23"
+  account = "OCI"
+}
+
 resource "test_assertions" "public_ip_non_ha" {
   component = "public_ip_non_ha_oci"
 
