@@ -1,5 +1,11 @@
 # terraform-aviatrix-mc-transit release notes
 
+## v2.1.4
+
+### Add support for provider 2.22.1.
+
+### Add support for new argument enable_preserve_as_path
+
 ## v2.1.3
 
 ### Automatically truncate VPC/VNET/VCN names at 30 characters

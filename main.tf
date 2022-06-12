@@ -85,6 +85,7 @@ resource "aviatrix_transit_gateway" "default" {
   enable_active_standby_preemptive = var.enable_active_standby_preemptive
   enable_s2c_rx_balancing          = var.enable_s2c_rx_balancing
   rx_queue_size                    = var.rx_queue_size
+  enable_preserve_as_path          = var.enable_preserve_as_path
 
   #Firenet Settings
   enable_firenet                = var.enable_firenet

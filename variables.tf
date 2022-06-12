@@ -360,6 +360,12 @@ variable "ha_fault_domain" {
   default     = null
 }
 
+variable "enable_preserve_as_path" {
+  description = "Enable preserve as_path when advertising manual summary cidrs on BGP transit gateway."
+  type        = bool
+  default     = null
+}
+
 locals {
   cloud                 = lower(var.cloud)
   name                  = coalesce(var.name, local.default_name)
