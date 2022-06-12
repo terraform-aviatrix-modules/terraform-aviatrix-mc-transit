@@ -1,5 +1,12 @@
 # terraform-aviatrix-mc-transit release notes
 
+## v2.1.3
+
+### Automatically truncate VPC/VNET/VCN names at 30 characters
+When not explicitly configuring the transit name, the default name could exceed 30 characters for regions with long names. In Alibaba the region description within paranthesis automatically gets dropped as well. So "acs-us-east-1 (Virginia)" will become "acs-us-east-1".
+
+### Set output aviatrix_transit_gateway to sensitive for terragrunt compatibility.
+
 ## v2.1.2
 
 ### Automatically disable AZ support for Azure Gov and DoD regions

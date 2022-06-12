@@ -364,7 +364,9 @@ locals {
   cloud                 = lower(var.cloud)
   name                  = coalesce(var.name, local.default_name)
   gw_name               = coalesce(var.gw_name, local.name)
-  default_name          = format("%s%s", lower(replace("avx-${var.region}", " ", "-")), (var.enable_egress_transit_firenet ? "-egress" : "-transit")) #Remove spaces from region names and force lowercase. Add egress for egress transits.
+  suffix                = var.enable_egress_transit_firenet ? "-egress" : "-transit"
+  region_name           = lower(replace(trim(split("(", var.region)[0], " "), " ", "-")) # Remove everything after "(" (Alibaba), trim whitespace and replace spaces with dashes. Force lowercase.
+  default_name          = format("avx-%s%s", local.region_name, local.suffix)
   cidr                  = var.cidr
   cidrbits              = tonumber(split("/", local.cidr)[1])
   newbits               = 26 - local.cidrbits
