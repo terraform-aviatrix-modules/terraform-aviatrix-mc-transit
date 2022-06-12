@@ -32,6 +32,29 @@ module "transit_ha_azure" {
   account = "Azure"
 }
 
+resource "test_assertions" "public_ip_non_ha" {
+  component = "public_ip_non_ha_azure"
+
+  check "gw_public_ip" {
+    description = "GW has public IP"
+    condition   = can(cidrnetmask("${module.transit_non_ha_azure.transit_gateway.eip}/32"))
+  }
+}
+
+resource "test_assertions" "public_ip_ha" {
+  component = "public_ip_ha_azure"
+
+  check "gw_public_ip" {
+    description = "GW has public IP"
+    condition   = can(cidrnetmask("${module.transit_ha_azure.transit_gateway.eip}/32"))
+  }
+
+  check "hagw_public_ip" {
+    description = "HAGW has public IP"
+    condition   = can(cidrnetmask("${module.transit_ha_azure.transit_gateway.ha_eip}/32"))
+  }
+}
+
 resource "test_assertions" "cloud_type_non_ha" {
   component = "cloud_type_non_ha_azure"
 
