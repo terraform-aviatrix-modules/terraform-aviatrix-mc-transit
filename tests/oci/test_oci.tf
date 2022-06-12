@@ -65,6 +65,20 @@ resource "test_assertions" "public_ip_ha" {
   }
 }
 
+resource "test_assertions" "public_ip_ha_single_ad" {
+  component = "public_ip_ha_oci_single_ad"
+
+  check "gw_public_ip" {
+    description = "GW has public IP"
+    condition   = can(cidrnetmask("${module.transit_ha_oci_single_ad.transit_gateway.eip}/32"))
+  }
+
+  check "hagw_public_ip" {
+    description = "HAGW has public IP"
+    condition   = can(cidrnetmask("${module.transit_ha_oci_single_ad.transit_gateway.ha_eip}/32"))
+  }
+}
+
 resource "test_assertions" "subnet_allocation_non_ha" {
   component = "subnet_allocation_non_ha_oci"
 
