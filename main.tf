@@ -86,6 +86,7 @@ resource "aviatrix_transit_gateway" "default" {
   enable_s2c_rx_balancing          = var.enable_s2c_rx_balancing
   rx_queue_size                    = var.rx_queue_size
   enable_preserve_as_path          = var.enable_preserve_as_path
+  enable_gateway_load_balancer     = var.enable_gateway_load_balancer
 
   #Firenet Settings
   enable_firenet                = var.enable_firenet

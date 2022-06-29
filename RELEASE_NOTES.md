@@ -1,5 +1,9 @@
 # terraform-aviatrix-mc-transit release notes
 
+## v2.1.5
+
+### Add support for enable_gateway_load_balancer on transit gateway (AWS Only).
+
 ## v2.1.4
 
 ### Add support for provider 2.22.1.

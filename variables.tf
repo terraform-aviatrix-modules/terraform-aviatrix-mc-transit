@@ -366,6 +366,12 @@ variable "enable_preserve_as_path" {
   default     = null
 }
 
+variable "enable_gateway_load_balancer" {
+  description = "Enable FireNet interfaces with AWS Gateway Load Balancer."
+  type        = bool
+  default     = null
+}
+
 locals {
   cloud                 = lower(var.cloud)
   name                  = coalesce(var.name, local.default_name)
