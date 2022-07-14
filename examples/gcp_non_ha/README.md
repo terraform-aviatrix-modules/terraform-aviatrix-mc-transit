@@ -2,7 +2,7 @@
 
 In this example, the module deploys the transit VPC as well as a single of Aviatrix transit gateway in GCP.
 
-```
+```hcl
 module "transit_non_ha_gcp" {
   source  = "terraform-aviatrix-modules/mc-transit/aviatrix"
   version = "2.1.3"
