@@ -383,8 +383,8 @@ locals {
   cidrbits              = tonumber(split("/", local.cidr)[1])
   newbits               = 26 - local.cidrbits
   netnum                = pow(2, local.newbits)
-  insane_mode_subnet    = cidrsubnet(local.cidr, local.newbits, local.netnum - 2)
-  ha_insane_mode_subnet = cidrsubnet(local.cidr, local.newbits, local.netnum - 1)
+  insane_mode_subnet    = var.insane_mode ? cidrsubnet(local.cidr, local.newbits, local.netnum - 2) : null
+  ha_insane_mode_subnet = var.insane_mode ? cidrsubnet(local.cidr, local.newbits, local.netnum - 1) : null
 
   #Auto disable AZ support for gov and dod regions in Azure
   az_support = local.is_gov ? false : var.az_support
