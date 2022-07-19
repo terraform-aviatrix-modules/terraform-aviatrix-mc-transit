@@ -1,5 +1,9 @@
 # terraform-aviatrix-mc-transit release notes
 
+## v2.1.6
+
+### Fix an issue where using a `cidr` smaller than /26 cause a function error.
+
 ## v2.1.5
 
 ### Add support for enable_gateway_load_balancer on transit gateway (AWS Only).
