@@ -7,6 +7,8 @@
 ### Revert marking outputs as sensitive
 In order to allow for using this module directly as root module in Terragrunt, the transit_gateway output was marked as sensitive before. This has proven to have undesireable side effects in vanilla Terraform operations. To use this module in Terragrunt, you need to wrap it in Terraform code or a wrapper module in stead.
 
+### Add support for active/standby mode through enable_active_standby argument.
+
 ## v2.1.5
 
 ### Add support for enable_gateway_load_balancer on transit gateway (AWS Only).

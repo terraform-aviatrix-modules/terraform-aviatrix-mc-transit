@@ -372,6 +372,12 @@ variable "enable_gateway_load_balancer" {
   default     = null
 }
 
+variable "enable_active_standby" {
+  description = "Enables Active-Standby Mode. Available only with HA enabled."
+  type        = bool
+  default     = null
+}
+
 locals {
   cloud                 = lower(var.cloud)
   name                  = coalesce(var.name, local.default_name)
