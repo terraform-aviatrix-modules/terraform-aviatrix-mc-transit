@@ -1,5 +1,12 @@
 # terraform-aviatrix-mc-transit release notes
 
+## v.2.2.0
+
+### Add support for 6.8 and provider version 2.23.0.
+
+### Add support for bgp_lan_interfaces_count argument
+This argument is used to add additional interfaces in order to set up BGP over LAN in Azure.
+
 ## v2.1.6
 
 ### Fix an issue where using a `cidr` smaller than /26 cause a function error.

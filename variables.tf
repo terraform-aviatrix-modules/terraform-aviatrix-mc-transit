@@ -378,6 +378,17 @@ variable "enable_active_standby" {
   default     = null
 }
 
+variable "bgp_lan_interfaces_count" {
+  description = "Number of interfaces that will be created for BGP over LAN enabled Azure transit."
+  default     = null
+  type        = number
+
+  validation {
+    condition     = var.bgp_lan_interfaces_count != null ? (var.bgp_lan_interfaces_count >= 1 && var.bgp_lan_interfaces_count <= 7) : true
+    error_message = "Maximum interfaces supported is 7, or 5 when Firenet is used."
+  }
+}
+
 locals {
   cloud                 = lower(var.cloud)
   name                  = coalesce(var.name, local.default_name)

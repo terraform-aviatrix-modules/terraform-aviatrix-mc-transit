@@ -88,6 +88,7 @@ resource "aviatrix_transit_gateway" "default" {
   rx_queue_size                    = var.rx_queue_size
   enable_preserve_as_path          = var.enable_preserve_as_path
   enable_gateway_load_balancer     = var.enable_gateway_load_balancer
+  bgp_lan_interfaces_count         = var.bgp_lan_interfaces_count
 
   #Firenet Settings
   enable_firenet                = var.enable_firenet
