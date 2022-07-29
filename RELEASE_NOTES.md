@@ -7,6 +7,8 @@
 ### Add support for bgp_lan_interfaces_count argument
 This argument is used to add additional interfaces in order to set up BGP over LAN in Azure.
 
+### Add support for private mode
+
 ## v2.1.6
 
 ### Fix an issue where using a `cidr` smaller than /26 cause a function error.
