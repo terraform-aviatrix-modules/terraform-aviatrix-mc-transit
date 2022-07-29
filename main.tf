@@ -90,6 +90,11 @@ resource "aviatrix_transit_gateway" "default" {
   enable_gateway_load_balancer     = var.enable_gateway_load_balancer
   bgp_lan_interfaces_count         = var.bgp_lan_interfaces_count
 
+  #Private mode settings
+  private_mode_lb_vpc_id      = var.private_mode_lb_vpc_id
+  private_mode_subnet_zone    = var.private_mode_subnet_zone
+  ha_private_mode_subnet_zone = var.ha_private_mode_subnet_zone
+
   #Firenet Settings
   enable_firenet                = var.enable_firenet
   enable_transit_firenet        = local.enable_transit_firenet

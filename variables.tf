@@ -389,6 +389,24 @@ variable "bgp_lan_interfaces_count" {
   }
 }
 
+variable "private_mode_lb_vpc_id" {
+  description = "VPC ID of Private Mode load balancer. Required when Private Mode is enabled on the Controller."
+  type        = string
+  default     = null
+}
+
+variable "private_mode_subnet_zone" {
+  description = "Availability Zone of the subnet. Required when Private Mode is enabled on the Controller and cloud_type is AWS or AWSGov."
+  type        = string
+  default     = null
+}
+
+variable "ha_private_mode_subnet_zone" {
+  description = "Availability Zone of the HA subnet. Required when Private Mode is enabled on the Controller and cloud_type is AWS or AWSGov."
+  type        = string
+  default     = null
+}
+
 locals {
   cloud                 = lower(var.cloud)
   name                  = coalesce(var.name, local.default_name)
