@@ -1,6 +1,6 @@
 # terraform-aviatrix-mc-transit release notes
 
-## v.2.2.0
+## v2.2.0
 
 ### Add support for 6.8 and provider version 2.23.0.
 

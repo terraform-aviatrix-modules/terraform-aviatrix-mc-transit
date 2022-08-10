@@ -8,6 +8,7 @@ resource "aviatrix_vpc" "default" {
   aviatrix_transit_vpc = contains(["ali"], local.cloud) || var.legacy_transit_vpc
   aviatrix_firenet_vpc = contains(["aws", "azure", "oci"], local.cloud) && !var.legacy_transit_vpc
   resource_group       = var.resource_group
+  private_mode_subnets = var.private_mode_subnets
 
   dynamic "subnets" {
     for_each = local.cloud == "gcp" ? ["dummy"] : [] #Trick to make block conditional. Count not available on dynamic blocks.

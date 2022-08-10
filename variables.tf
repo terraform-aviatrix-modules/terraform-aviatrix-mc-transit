@@ -407,6 +407,12 @@ variable "ha_private_mode_subnet_zone" {
   default     = null
 }
 
+variable "private_mode_subnets" {
+  description = "Switch to only launch private subnets. Only available when Private Mode is enabled on the Controller."
+  type        = bool
+  default     = null
+}
+
 locals {
   cloud                 = lower(var.cloud)
   name                  = coalesce(var.name, local.default_name)
