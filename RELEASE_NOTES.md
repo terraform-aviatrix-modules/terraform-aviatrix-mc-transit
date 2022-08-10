@@ -8,6 +8,11 @@
 This argument is used to add additional interfaces in order to set up BGP over LAN in Azure.
 
 ### Add support for private mode
+These arguments were added to support this:
+- private_mode_subnets
+- private_mode_lb_vpc_id
+- private_mode_subnet_zone
+- ha_private_mode_subnet_zone
 
 ## v2.1.6
 
