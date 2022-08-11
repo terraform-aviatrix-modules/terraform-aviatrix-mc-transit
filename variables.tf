@@ -559,7 +559,12 @@ locals {
     ali   = null
   }
 
-  single_az_mode = local.az1 == local.az2 && contains(["aws", "azure"], lower(var.cloud)) #Single AZ mode is not related to HA. It is meant for corner case scenario's where customers want to deploy the entire firenet in 1 AZ for traffic cost saving.
+  #Single AZ mode is not related to HA. It is meant for corner case scenario's where customers want to deploy the entire firenet in 1 AZ for traffic cost saving.
+  single_az_mode = (
+    local.az1 == local.az2                          #Trigger only if az1 and az2 are set to the same value
+    && contains(["aws", "azure"], lower(var.cloud)) #And it is in Azure or AWS.
+    && local.az1 != null                            #And the AZ has not been nulled.
+  )
 
   #Determine OCI Availability domains
   default_availability_domain    = local.cloud == "oci" ? aviatrix_vpc.default.availability_domains[0] : null
