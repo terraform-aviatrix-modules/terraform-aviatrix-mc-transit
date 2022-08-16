@@ -395,22 +395,11 @@ variable "private_mode_lb_vpc_id" {
   default     = null
 }
 
-variable "private_mode_subnet_zone" {
-  description = "Availability Zone of the subnet. Required when Private Mode is enabled on the Controller and cloud_type is AWS or AWSGov."
-  type        = string
-  default     = null
-}
-
-variable "ha_private_mode_subnet_zone" {
-  description = "Availability Zone of the HA subnet. Required when Private Mode is enabled on the Controller and cloud_type is AWS or AWSGov."
-  type        = string
-  default     = null
-}
-
 variable "private_mode_subnets" {
   description = "Switch to only launch private subnets. Only available when Private Mode is enabled on the Controller."
   type        = bool
-  default     = null
+  default     = false
+  nullable    = false
 }
 
 locals {
@@ -424,8 +413,8 @@ locals {
   cidrbits              = tonumber(split("/", local.cidr)[1])
   newbits               = 26 - local.cidrbits
   netnum                = pow(2, local.newbits)
-  insane_mode_subnet    = var.insane_mode ? cidrsubnet(local.cidr, local.newbits, local.netnum - 2) : null
-  ha_insane_mode_subnet = var.insane_mode ? cidrsubnet(local.cidr, local.newbits, local.netnum - 1) : null
+  insane_mode_subnet    = var.insane_mode || var.private_mode_subnets ? cidrsubnet(local.cidr, local.newbits, local.netnum - 2) : null
+  ha_insane_mode_subnet = var.insane_mode || var.private_mode_subnets ? cidrsubnet(local.cidr, local.newbits, local.netnum - 1) : null
 
   #Auto disable AZ support for gov and dod regions in Azure
   az_support = local.is_gov ? false : var.az_support
@@ -445,7 +434,7 @@ locals {
   }
 
   subnet = (
-    var.insane_mode && contains(["aws", "azure", "oci"], local.cloud) ?
+    (var.insane_mode && contains(["aws", "azure", "oci"], local.cloud)) || (var.private_mode_subnets && contains(["aws", "azure"], local.cloud)) ?
     local.insane_mode_subnet
     :
     (local.cloud == "gcp" ?
@@ -464,7 +453,7 @@ locals {
   }
 
   ha_subnet = (
-    var.insane_mode && contains(["aws", "azure", "oci"], local.cloud) ?
+    (var.insane_mode && contains(["aws", "azure", "oci"], local.cloud)) || (var.private_mode_subnets && contains(["aws", "azure"], local.cloud)) ?
     local.ha_insane_mode_subnet
     :
     (local.cloud == "gcp" ?
