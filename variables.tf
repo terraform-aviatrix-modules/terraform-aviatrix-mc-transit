@@ -567,4 +567,12 @@ locals {
   ha_fault_domain        = var.ha_fault_domain != null ? var.ha_fault_domain : local.default_ha_fault_domain
 
   enable_transit_firenet = var.enable_transit_firenet || var.enable_egress_transit_firenet #Automatically toggle transit firenet true, if egress transit firenet is enabled
+
+  #VPC Type Settings
+  aviatrix_transit_vpc = contains(["ali"], local.cloud) || var.legacy_transit_vpc
+  aviatrix_firenet_vpc = (var.legacy_transit_vpc || var.private_mode_subnets ?
+    false
+    :
+    contains(["aws", "azure", "oci"], local.cloud)
+  )
 }

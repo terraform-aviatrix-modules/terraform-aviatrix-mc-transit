@@ -5,8 +5,8 @@ resource "aviatrix_vpc" "default" {
   cidr                 = local.cloud == "gcp" ? null : var.cidr
   account_name         = var.account
   name                 = substr(local.name, 0, 30)
-  aviatrix_transit_vpc = contains(["ali"], local.cloud) || var.legacy_transit_vpc
-  aviatrix_firenet_vpc = contains(["aws", "azure", "oci"], local.cloud) && !var.legacy_transit_vpc
+  aviatrix_transit_vpc = local.aviatrix_transit_vpc
+  aviatrix_firenet_vpc = local.aviatrix_firenet_vpc
   resource_group       = var.resource_group
   private_mode_subnets = var.private_mode_subnets
 
