@@ -402,6 +402,36 @@ variable "private_mode_subnets" {
   nullable    = false
 }
 
+variable "allocate_new_eip" {
+  description = "When value is false, reuse an idle address in Elastic IP pool for this gateway. Otherwise, allocate a new Elastic IP and use it for this gateway."
+  type        = bool
+  default     = null
+}
+
+variable "eip" {
+  description = "Required when allocate_new_eip is false. It uses the specified EIP for this gateway."
+  type        = string
+  default     = null
+}
+
+variable "ha_eip" {
+  description = "Required when allocate_new_eip is false. It uses the specified EIP for this gateway."
+  type        = string
+  default     = null
+}
+
+variable "azure_eip_name_resource_group" {
+  description = "Name of public IP Address resource and its resource group in Azure to be assigned to the Transit Gateway instance."
+  type        = string
+  default     = null
+}
+
+variable "ha_azure_eip_name_resource_group" {
+  description = "Name of public IP Address resource and its resource group in Azure to be assigned to the Transit Gateway instance."
+  type        = string
+  default     = null
+}
+
 locals {
   cloud                 = lower(var.cloud)
   name                  = coalesce(var.name, local.default_name)

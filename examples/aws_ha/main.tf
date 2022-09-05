@@ -1,6 +1,6 @@
 module "aws_transit" {
   source  = "terraform-aviatrix-modules/mc-transit/aviatrix"
-  version = "2.2.0"
+  version = "2.2.1"
 
   cloud   = "aws"
   region  = "eu-west-3"

@@ -1,5 +1,15 @@
 # terraform-aviatrix-mc-transit release notes
 
+## v2.2.1
+
+### Add support for customizing EIP settings.
+5 new arguments have been added, to configure the transit gateway with custom EIP settings:
+- allocate_new_eip
+- eip
+- ha_eip
+- azure_eip_name_resource_group
+- ha_azure_eip_name_resource_group
+
 ## v2.2.0
 
 ### Add support for 6.8 and provider version 2.23.0.

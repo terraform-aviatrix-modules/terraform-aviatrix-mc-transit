@@ -91,6 +91,13 @@ resource "aviatrix_transit_gateway" "default" {
   enable_gateway_load_balancer     = var.enable_gateway_load_balancer
   bgp_lan_interfaces_count         = var.bgp_lan_interfaces_count
 
+  #Custom EIP settings
+  allocate_new_eip                 = var.allocate_new_eip
+  eip                              = var.eip
+  ha_eip                           = var.ha_eip
+  azure_eip_name_resource_group    = var.azure_eip_name_resource_group
+  ha_azure_eip_name_resource_group = var.ha_azure_eip_name_resource_group
+
   #Private mode settings
   private_mode_lb_vpc_id      = var.private_mode_lb_vpc_id
   private_mode_subnet_zone    = var.private_mode_subnets && local.cloud == "aws" ? format("%s%s", var.region, local.az1) : null
