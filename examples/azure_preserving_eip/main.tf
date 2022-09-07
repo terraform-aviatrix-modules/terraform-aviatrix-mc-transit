@@ -23,9 +23,9 @@ module "mc-transit" {
   version                          = "2.2.1"
   resource_group                   = azurerm_resource_group.example.name
   cloud                            = "Azure"
-  region                           = var.azure_region
+  region                           = "West Europe"
   cidr                             = "10.17.0.0/23"
-  account                          = var.avx_ctrl_account_azure
+  account                          = "azure-account-onboarded-on-ctrl"
  
   allocate_new_eip                 = false
   eip                              = azurerm_public_ip.pip1.ip_address
