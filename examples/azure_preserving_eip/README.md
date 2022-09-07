@@ -1,6 +1,7 @@
 ### Usage Example Azure HA
 
-In this example, the module deploys the transit VNET as well as a HA pair of Aviatrix transit gateways.
+In this example, the module deploys the transit VNET as well as a HA pair of Aviatrix transit gateways in existing Resource Group where Public IPs were created. 
+This is passed then as a set of attributes along with resrouce_group name.
 
 ```hcl
 resource "azurerm_resource_group" "example" {
@@ -13,19 +14,31 @@ resource "azurerm_public_ip" "pip1" {
   resource_group_name = azurerm_resource_group.example.name
   location            = azurerm_resource_group.example.location
   allocation_method   = "Static"
-
-  tags = {
-    environment = "Production"
-  }
 }
 resource "azurerm_public_ip" "pip2" {
   name                = "PIP-TrGW-ha"
   resource_group_name = azurerm_resource_group.example.name
   location            = azurerm_resource_group.example.location
   allocation_method   = "Static"
+}
 
-  tags = {
-    environment = "Production"
-  }
+module "mc-transit" {
+  source                           = "git::https://github.com/terraform-aviatrix-modules/terraform-aviatrix-mc-transit.git"
+  resource_group                   = azurerm_resource_group.example.name
+  cloud                            = "Azure"
+  region                           = var.azure_region
+  cidr                             = "10.17.0.0/23"
+  account                          = var.avx_ctrl_account_azure
+ 
+  allocate_new_eip                 = false
+  eip                              = azurerm_public_ip.pip1.ip_address
+  azure_eip_name_resource_group    = "PIP-TrGW:${azurerm_resource_group.example.name}"
+  ha_eip                           = azurerm_public_ip.pip2.ip_address
+  ha_azure_eip_name_resource_group = "PIP-TrGW-ha:${azurerm_resource_group.example.name}"
+
+  depends_on = [
+    azurerm_public_ip.pip1,
+    azurerm_public_ip.pip2
+  ]
 }
 ```
