@@ -15,12 +15,14 @@ resource "azurerm_public_ip" "pip1" {
   resource_group_name = azurerm_resource_group.example.name
   location            = azurerm_resource_group.example.location
   allocation_method   = "Static"
+  sku                 = "Standard"
 }
 resource "azurerm_public_ip" "pip2" {
   name                = "PIP-TrGW-ha"
   resource_group_name = azurerm_resource_group.example.name
   location            = azurerm_resource_group.example.location
   allocation_method   = "Static"
+  sku                 = "Standard"
 }
 
 module "mc-transit" {
@@ -34,9 +36,9 @@ module "mc-transit" {
  
   allocate_new_eip                 = false
   eip                              = azurerm_public_ip.pip1.ip_address
-  azure_eip_name_resource_group    = "PIP-TrGW:${azurerm_resource_group.example.name}"
+  azure_eip_name_resource_group    = "${azurerm_public_ip.pip1.name}:${azurerm_resource_group.example.name}"
   ha_eip                           = azurerm_public_ip.pip2.ip_address
-  ha_azure_eip_name_resource_group = "PIP-TrGW-ha:${azurerm_resource_group.example.name}"
+  ha_azure_eip_name_resource_group = "${azurerm_public_ip.pip2.name}:${azurerm_resource_group.example.name}"
 
   depends_on = [
     azurerm_public_ip.pip1,
