@@ -1,7 +1,8 @@
 ### Usage Example Azure HA Transit Gateway deployment when Public IP are passed and would be preserved when deleting/redeploying GWs. 
 
-In this example, the module deploys the transit VNET as well as a HA pair of Aviatrix transit gateways in existing Resource Group where Public IPs were created. 
-This is passed then as a set of attributes along with resrouce_group name.
+In this example, the module deploys the transit VNET as well as a HA pair of Aviatrix transit gateways.
+It is mandatory to deploy them in existing Resource Group where Public IPs were created. 
+EIP is passed then as a set of attributes along with this resrouce_group name.
 
 ```hcl
 resource "azurerm_resource_group" "example" {
