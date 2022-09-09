@@ -19,14 +19,14 @@ resource "azurerm_public_ip" "pip2" {
 }
 
 module "mc-transit" {
-  source                           = "terraform-aviatrix-modules/mc-transit/aviatrix"
-  version                          = "2.2.1"
-  resource_group                   = azurerm_resource_group.example.name
-  cloud                            = "Azure"
-  region                           = "West Europe"
-  cidr                             = "10.17.0.0/23"
-  account                          = "azure-account-onboarded-on-ctrl"
- 
+  source         = "terraform-aviatrix-modules/mc-transit/aviatrix"
+  version        = "2.2.1"
+  resource_group = azurerm_resource_group.example.name
+  cloud          = "Azure"
+  region         = "West Europe"
+  cidr           = "10.17.0.0/23"
+  account        = "azure-account-onboarded-on-ctrl"
+
   allocate_new_eip                 = false
   eip                              = azurerm_public_ip.pip1.ip_address
   azure_eip_name_resource_group    = "${azurerm_public_ip.pip1.name}:${azurerm_resource_group.example.name}"
