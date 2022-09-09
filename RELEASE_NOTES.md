@@ -10,6 +10,8 @@
 - azure_eip_name_resource_group
 - ha_azure_eip_name_resource_group
 
+### Change private mode behavior (better logic and automation)
+
 ## v2.2.0
 
 ### Add support for 6.8 and provider version 2.23.0.
