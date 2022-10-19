@@ -389,6 +389,12 @@ variable "bgp_lan_interfaces_count" {
   }
 }
 
+variable "enable_monitor_gateway_subnets" {
+  description = "Enables Monitor Gateway Subnet feature in AWS"
+  type        = bool
+  default     = false
+}
+
 variable "private_mode_lb_vpc_id" {
   description = "VPC ID of Private Mode load balancer. Required when Private Mode is enabled on the Controller."
   type        = string

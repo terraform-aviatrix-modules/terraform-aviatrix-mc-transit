@@ -90,6 +90,7 @@ resource "aviatrix_transit_gateway" "default" {
   enable_preserve_as_path          = var.enable_preserve_as_path
   enable_gateway_load_balancer     = var.enable_gateway_load_balancer
   bgp_lan_interfaces_count         = var.bgp_lan_interfaces_count
+  enable_monitor_gateway_subnets   = var.enable_monitor_gateway_subnets
 
   #Custom EIP settings
   allocate_new_eip                 = var.allocate_new_eip
