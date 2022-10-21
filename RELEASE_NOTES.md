@@ -1,5 +1,9 @@
 # terraform-aviatrix-mc-transit release notes
 
+## v2.3.1
+
+### Add support for enabling gateway subnet monitoring in AWS
+
 ## v2.3.0
 
 ### Controller version 6.9 / Terraform provider version 2.24.x compatibility
