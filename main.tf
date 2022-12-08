@@ -110,8 +110,8 @@ resource "aviatrix_transit_gateway" "default" {
   enable_egress_transit_firenet = var.enable_egress_transit_firenet
 
   #GCP Firenet settings
-  lan_vpc_id         = var.enable_transit_firenet && local.cloud == "gcp" ? aviatrix_vpc.lan_vpc[0].name : null
-  lan_private_subnet = var.enable_transit_firenet && local.cloud == "gcp" ? aviatrix_vpc.lan_vpc[0].subnets[0].cidr : null
+  lan_vpc_id         = local.enable_transit_firenet && local.cloud == "gcp" ? aviatrix_vpc.lan_vpc[0].name : null
+  lan_private_subnet = local.enable_transit_firenet && local.cloud == "gcp" ? aviatrix_vpc.lan_vpc[0].subnets[0].cidr : null
 
   dynamic "bgp_lan_interfaces" {
     for_each = var.bgp_lan_interfaces

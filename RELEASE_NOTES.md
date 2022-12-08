@@ -1,5 +1,9 @@
 # terraform-aviatrix-mc-transit release notes
 
+## v2.3.2
+
+### Add support for dual transit firenet configuration for GCP
+
 ## v2.3.1
 
 ### Add support for enabling gateway subnet monitoring in AWS
