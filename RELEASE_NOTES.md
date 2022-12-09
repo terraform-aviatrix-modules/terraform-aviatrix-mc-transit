@@ -1,5 +1,10 @@
 # terraform-aviatrix-mc-transit release notes
 
+## v2.4.0
+
+### Add support for Controller version 7.0 and Terraform provider version 3.0.0.
+This release is providing compatibility with these versions.
+
 ## v2.3.2
 
 ### Add support for dual transit firenet configuration for GCP

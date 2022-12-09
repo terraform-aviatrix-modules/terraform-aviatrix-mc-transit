@@ -6,7 +6,7 @@ Deploys a VPC/VNET/VCN and Aviatrix Transit gateways.
 ### Compatibility
 Module version | Terraform version | Controller version | Terraform provider version
 :--- | :--- | :--- | :---
-v2.3.2 | >= 1.1.1 | >= 6.9 | ~>2.24.0
+v2.4.0 | >= 1.1.1 | >= 7.0 | ~>3.0.0
 
 Check [release notes](https://github.com/terraform-aviatrix-modules/terraform-aviatrix-mc-transit/blob/main/RELEASE_NOTES.md) for more details.
 Check [Compatibility list](https://github.com/terraform-aviatrix-modules/terraform-aviatrix-mc-transit/blob/main/COMPATIBILITY.md) for older versions.
