@@ -1,5 +1,9 @@
 # terraform-aviatrix-mc-transit release notes
 
+## v2.4.1
+
+### Add support for enable_vpc_dns_server
+
 ## v2.4.0
 
 ### Add support for Controller version 7.0 and Terraform provider version 3.0.0.
