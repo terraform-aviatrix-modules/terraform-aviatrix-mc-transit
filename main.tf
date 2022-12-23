@@ -31,7 +31,7 @@ resource "aviatrix_vpc" "default" {
 
 # LAN VPC 
 resource "aviatrix_vpc" "lan_vpc" {
-  count                = local.cloud == "gcp" && var.enable_transit_firenet ? 1 : 0 #Only create for GCP and when firenet is enabled
+  count                = local.cloud == "gcp" && local.enable_transit_firenet ? 1 : 0 #Only create for GCP and when firenet is enabled
   cloud_type           = 4
   account_name         = var.account
   name                 = "${local.name}-lan"
