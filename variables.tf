@@ -438,6 +438,12 @@ variable "ha_azure_eip_name_resource_group" {
   default     = null
 }
 
+variable "enable_vpc_dns_server" {
+  description = "Enable VPC DNS Server for Gateway."
+  type        = bool
+  default     = null
+}
+
 locals {
   cloud                 = lower(var.cloud)
   name                  = coalesce(var.name, local.default_name)

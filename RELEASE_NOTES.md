@@ -1,5 +1,9 @@
 # terraform-aviatrix-mc-transit release notes
 
+## v2.3.3
+
+### Add support for enable_vpc_dns_server
+
 ## v2.3.2
 
 ### Add support for dual transit firenet configuration for GCP
