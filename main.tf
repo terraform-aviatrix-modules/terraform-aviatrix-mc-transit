@@ -56,9 +56,11 @@ resource "aviatrix_vpc" "bgp_over_lan_vpc" {
 
   dynamic "subnets" {
     for_each = { for k, v in each.value : k => v if v != null }
-    name     = "${each.key}-${var.region}"
-    cidr     = subnets.value
-    region   = var.region
+    content {
+      name   = "${each.key}-${var.region}"
+      cidr   = subnets.value
+      region = var.region
+    }
   }
 }
 
