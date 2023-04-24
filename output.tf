@@ -8,6 +8,11 @@ output "transit_gateway" {
   value       = aviatrix_transit_gateway.default
 }
 
+output "bgp_over_lan_vpcs" {
+  description = "The created BGP over LAN VPC."
+  value       = aviatrix_vpc.bgp_over_lan_vpc
+}
+
 #Firenet details is used when this module is combined with the mc-firenet module to propagate details between modules.
 output "mc_firenet_details" {
   value = {
