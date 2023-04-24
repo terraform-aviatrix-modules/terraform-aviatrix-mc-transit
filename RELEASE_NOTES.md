@@ -1,5 +1,9 @@
 # terraform-aviatrix-mc-transit release notes
 
+## v2.4.2
+
+### Add support for GCP BGP over LAN VPC creation.
+
 ## v2.4.1
 
 ### Add support for enable_vpc_dns_server
