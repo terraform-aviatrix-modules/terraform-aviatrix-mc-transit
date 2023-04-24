@@ -46,7 +46,7 @@ resource "aviatrix_vpc" "lan_vpc" {
 }
 
 resource "aviatrix_vpc" "bgp_over_lan_vpc" {
-  for_each = merge(local.pri_bgp_lan_vpcs_to_create, local.ha_bgp_lan_vpcs_to_create)
+  for_each = merge(local.bgp_lan_vpcs_to_create, local.ha_bgp_lan_vpcs_to_create)
 
   cloud_type           = 4
   account_name         = var.account
