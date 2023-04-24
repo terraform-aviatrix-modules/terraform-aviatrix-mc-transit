@@ -56,7 +56,7 @@ resource "aviatrix_vpc" "bgp_over_lan_vpc" {
 
   subnets {
     name   = "${each.key}-${var.region}"
-    cidr   = subnets.value
+    cidr   = each.value
     region = var.region
   }
 }
