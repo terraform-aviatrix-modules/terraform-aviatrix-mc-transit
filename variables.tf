@@ -636,5 +636,5 @@ locals {
   ha_bgp_lan_interfaces   = { for i, v in var.ha_bgp_lan_interfaces : (v["vpc_id"] == "" ? local.ha_bgp_lan_default_name[i] : v["vpc_id"]) => v }
 
   bgp_lan_vpcs_to_create    = { for k, v in local.bgp_lan_interfaces : k => v["subnet"] if local.cloud == "gcp" && v["create_vpc"] }
-  ha_bgp_lan_vpcs_to_create = { for v, v in local.ha_bgp_lan_interfaces : k => v["subnet"] if local.cloud == "gcp" && v["create_vpc"] && contains(values(local.bgp_lan_vpcs_to_create), v["subnet"] == false) }
+  ha_bgp_lan_vpcs_to_create = { for k, v in local.ha_bgp_lan_interfaces : k => v["subnet"] if local.cloud == "gcp" && v["create_vpc"] && contains(values(local.bgp_lan_vpcs_to_create), v["subnet"] == false) }
 }
