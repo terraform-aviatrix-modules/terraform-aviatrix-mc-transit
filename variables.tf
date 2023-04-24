@@ -294,7 +294,7 @@ variable "bgp_lan_interfaces" {
   description = "Interfaces to run BGP protocol on top of the ethernet interface."
   type = list(object(
     {
-      vpc_id     = string,
+      vpc_id     = optional(string, "")
       subnet     = string,
       create_vpc = optional(bool, false)
     }
@@ -307,7 +307,7 @@ variable "ha_bgp_lan_interfaces" {
   description = "Interfaces to run BGP protocol on top of the ethernet interface."
   type = list(object(
     {
-      vpc_id     = string,
+      vpc_id     = optional(string, "")
       subnet     = string,
       create_vpc = optional(bool, false)
     }
@@ -630,6 +630,11 @@ locals {
     contains(["aws", "azure", "oci"], local.cloud)
   )
 
-  pri_bgp_lan_vpcs_to_create = { for i, v in var.bgp_lan_interfaces : "${local.name}-bgp-${i}" => v["subnet"] if local.cloud == "gcp" && v["create_vpc"] }
-  ha_bgp_lan_vpcs_to_create  = { for i, v in var.ha_bgp_lan_interfaces : "${local.name}-ha-bgp-${i}" => v["subnet"] if local.cloud == "gcp" && v["create_vpc"] && contains(values(local.pri_bgp_lan_vpcs_to_create), v["subnet"] == false) }
+  bgp_over_lan_default_name    = [for i, v in var.bgp_lan_interfaces : "${local.name}-bgp-${i}"]
+  ha_bgp_over_lan_default_name = [for i, v in var.bgp_lan_interfaces : v["subnet"] == var.ha_bgp_lan_interfaces[i]["subnet"] ? local.bgp_over_lan_default_name : "${local.name}-ha-bgp-${i}"]
+  bgp_over_lan_interfaces      = { for i, v in var.bgp_lan_interfaces : (v["vpc_id"] == "" ? local.bgp_over_lan_default_name[i] : v["vpc_id"]) => v }
+  ha_bgp_over_lan_interfaces   = { for i, v in var.ha_bgp_lan_interfaces : (v["vpc_id"] == "" ? local.ha_bgp_over_lan_default_name[i] : v["vpc_id"]) => v }
+
+  pri_bgp_lan_vpcs_to_create = { for k, v in local.bgp_lan_interfaces : k => v["subnet"] if local.cloud == "gcp" && v["create_vpc"] }
+  ha_bgp_lan_vpcs_to_create  = { for v, v in local.ha_bgp_lan_interfaces : k => v["subnet"] if local.cloud == "gcp" && v["create_vpc"] && contains(values(local.pri_bgp_lan_vpcs_to_create), v["subnet"] == false) }
 }

@@ -135,13 +135,13 @@ resource "aviatrix_transit_gateway" "default" {
   dynamic "bgp_lan_interfaces" {
     for_each = var.bgp_lan_interfaces
     content {
-      vpc_id = bgp_lan_interfaces.value.vpc_id
+      vpc_id = local.bgp_lan_interfaces.value.vpc_id
       subnet = bgp_lan_interfaces.value.subnet
     }
   }
 
   dynamic "ha_bgp_lan_interfaces" {
-    for_each = var.ha_bgp_lan_interfaces
+    for_each = local.ha_bgp_lan_interfaces
     content {
       vpc_id = ha_bgp_lan_interfaces.value.vpc_id
       subnet = ha_bgp_lan_interfaces.value.subnet
