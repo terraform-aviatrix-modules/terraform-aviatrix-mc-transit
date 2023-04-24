@@ -135,7 +135,7 @@ resource "aviatrix_transit_gateway" "default" {
     for_each = local.bgp_lan_interfaces
     content {
       vpc_id = bgp_lan_interfaces.key
-      subnet = bgp_lan_interfaces.value.subnet
+      subnet = bgp_lan_interfaces.value["subnet"]
     }
   }
 
@@ -143,7 +143,7 @@ resource "aviatrix_transit_gateway" "default" {
     for_each = local.ha_bgp_lan_interfaces
     content {
       vpc_id = ha_bgp_lan_interfaces.key
-      subnet = ha_bgp_lan_interfaces.value.subnet
+      subnet = ha_bgp_lan_interfaces.value["subnet"]
     }
   }
 
