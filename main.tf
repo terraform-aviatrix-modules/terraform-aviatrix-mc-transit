@@ -54,13 +54,10 @@ resource "aviatrix_vpc" "bgp_over_lan_vpc" {
   aviatrix_transit_vpc = false
   aviatrix_firenet_vpc = false
 
-  dynamic "subnets" {
-    for_each = { for k, v in each.value : k => v if v != null }
-    content {
-      name   = "${each.key}-${var.region}"
-      cidr   = subnets.value
-      region = var.region
-    }
+  subnets {
+    name   = "${each.key}-${var.region}"
+    cidr   = subnets.value
+    region = var.region
   }
 }
 
