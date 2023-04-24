@@ -292,16 +292,28 @@ variable "resource_group" {
 
 variable "bgp_lan_interfaces" {
   description = "Interfaces to run BGP protocol on top of the ethernet interface."
-  type        = list(any)
-  default     = []
-  nullable    = false
+  type = list(object(
+    {
+      vpc_id     = string,
+      subnet     = string,
+      create_vpc = optional(bool, false)
+    }
+  ))
+  default  = []
+  nullable = false
 }
 
 variable "ha_bgp_lan_interfaces" {
   description = "Interfaces to run BGP protocol on top of the ethernet interface."
-  type        = list(any)
-  default     = []
-  nullable    = false
+  type = list(object(
+    {
+      vpc_id     = string,
+      subnet     = string,
+      create_vpc = optional(bool, false)
+    }
+  ))
+  default  = []
+  nullable = false
 }
 
 variable "enable_active_standby_preemptive" {
@@ -617,4 +629,7 @@ locals {
     :
     contains(["aws", "azure", "oci"], local.cloud)
   )
+
+  pri_bgp_lan_vpcs_to_create = { for i, v in var.bgp_lan_interfaces : "${local.name}-bgp-${i}" => v["subnet"] if local.cloud == "gcp" && v["create_vpc"] }
+  ha_bgp_lan_vpcs_to_create  = { for i, v in var.ha_bgp_lan_interfaces : "${local.name}-ha-bgp-${i}" => v["subnet"] if local.cloud == "gcp" && v["create_vpc"] && contains(values(local.pri_bgp_lan_vpcs_to_create), v["subnet"] == false) }
 }
