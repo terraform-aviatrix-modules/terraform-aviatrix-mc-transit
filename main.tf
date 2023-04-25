@@ -45,6 +45,22 @@ resource "aviatrix_vpc" "lan_vpc" {
   }
 }
 
+resource "aviatrix_vpc" "bgp_over_lan_vpc" {
+  for_each = merge(local.bgp_lan_vpcs_to_create, local.ha_bgp_lan_vpcs_to_create)
+
+  cloud_type           = 4
+  account_name         = var.account
+  name                 = each.key
+  aviatrix_transit_vpc = false
+  aviatrix_firenet_vpc = false
+
+  subnets {
+    name   = "${each.key}-${var.region}"
+    cidr   = each.value
+    region = var.region
+  }
+}
+
 #Transit GW
 resource "aviatrix_transit_gateway" "default" {
   cloud_type                       = local.cloud_type
@@ -116,18 +132,22 @@ resource "aviatrix_transit_gateway" "default" {
   lan_private_subnet = local.enable_transit_firenet && local.cloud == "gcp" ? aviatrix_vpc.lan_vpc[0].subnets[0].cidr : null
 
   dynamic "bgp_lan_interfaces" {
-    for_each = var.bgp_lan_interfaces
+    for_each = local.bgp_lan_interfaces
     content {
-      vpc_id = bgp_lan_interfaces.value.vpc_id
-      subnet = bgp_lan_interfaces.value.subnet
+      vpc_id = bgp_lan_interfaces.key
+      subnet = bgp_lan_interfaces.value["subnet"]
     }
   }
 
   dynamic "ha_bgp_lan_interfaces" {
-    for_each = var.ha_bgp_lan_interfaces
+    for_each = local.ha_bgp_lan_interfaces
     content {
-      vpc_id = ha_bgp_lan_interfaces.value.vpc_id
-      subnet = ha_bgp_lan_interfaces.value.subnet
+      vpc_id = ha_bgp_lan_interfaces.key
+      subnet = ha_bgp_lan_interfaces.value["subnet"]
     }
   }
+
+  depends_on = [
+    aviatrix_vpc.bgp_over_lan_vpc
+  ]
 }
