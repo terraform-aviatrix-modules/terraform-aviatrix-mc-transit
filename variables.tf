@@ -631,7 +631,7 @@ locals {
   )
 
   bgp_lan_default_name    = local.cloud == "gcp" ? [for i, v in var.bgp_lan_interfaces : "${local.name}-bgp-${i}"]: []
-  ha_bgp_lan_default_name = var.ha_gw && local.cloud == "gcp" ? [for i, v in var.bgp_lan_interfaces : v["subnet"] == var.ha_bgp_lan_interfaces[i]["subnet"] ? local.bgp_lan_default_name[i] : "${local.name}-ha-bgp-${i}"] : {}
+  ha_bgp_lan_default_name = var.ha_gw && local.cloud == "gcp" ? [for i, v in var.bgp_lan_interfaces : v["subnet"] == var.ha_bgp_lan_interfaces[i]["subnet"] ? local.bgp_lan_default_name[i] : "${local.name}-ha-bgp-${i}"] : []
   bgp_lan_interfaces = local.cloud == "gcp" ? { for i, v in var.bgp_lan_interfaces : (v["vpc_id"] == "" ? local.bgp_lan_default_name[i] : v["vpc_id"]) => {
     subnet     = v["subnet"],
     create_vpc = v["vpc_id"] == "" ? true : v["create_vpc"]
