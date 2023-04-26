@@ -630,17 +630,17 @@ locals {
     contains(["aws", "azure", "oci"], local.cloud)
   )
 
-  bgp_lan_default_name    = [for i, v in var.bgp_lan_interfaces : "${local.name}-bgp-${i}"]
-  ha_bgp_lan_default_name = [for i, v in var.bgp_lan_interfaces : v["subnet"] == var.ha_bgp_lan_interfaces[i]["subnet"] ? local.bgp_lan_default_name[i] : "${local.name}-ha-bgp-${i}"]
-  bgp_lan_interfaces = { for i, v in var.bgp_lan_interfaces : (v["vpc_id"] == "" ? local.bgp_lan_default_name[i] : v["vpc_id"]) => {
+  bgp_lan_default_name    = local.cloud == "gcp" ? [for i, v in var.bgp_lan_interfaces : "${local.name}-bgp-${i}"]: []
+  ha_bgp_lan_default_name = var.ha_gw && local.cloud == "gcp" ? [for i, v in var.bgp_lan_interfaces : v["subnet"] == var.ha_bgp_lan_interfaces[i]["subnet"] ? local.bgp_lan_default_name[i] : "${local.name}-ha-bgp-${i}"] : {}
+  bgp_lan_interfaces = local.cloud == "gcp" ? { for i, v in var.bgp_lan_interfaces : (v["vpc_id"] == "" ? local.bgp_lan_default_name[i] : v["vpc_id"]) => {
     subnet     = v["subnet"],
     create_vpc = v["vpc_id"] == "" ? true : v["create_vpc"]
-  } }
-  ha_bgp_lan_interfaces = { for i, v in var.ha_bgp_lan_interfaces : (v["vpc_id"] == "" ? local.ha_bgp_lan_default_name[i] : v["vpc_id"]) => {
+  } } : {}
+  ha_bgp_lan_interfaces = var.ha_gw && local.cloud == "gcp" ? { for i, v in var.ha_bgp_lan_interfaces : (v["vpc_id"] == "" ? local.ha_bgp_lan_default_name[i] : v["vpc_id"]) => {
     subnet     = v["subnet"],
     create_vpc = v["vpc_id"] == "" ? true : v["create_vpc"]
-  } }
+  } } : {}
 
-  bgp_lan_vpcs_to_create    = { for k, v in local.bgp_lan_interfaces : k => v["subnet"] if local.cloud == "gcp" && v["create_vpc"] }
-  ha_bgp_lan_vpcs_to_create = { for k, v in local.ha_bgp_lan_interfaces : k => v["subnet"] if local.cloud == "gcp" && v["create_vpc"] && contains(values(local.bgp_lan_vpcs_to_create), v["subnet"]) == false }
+  bgp_lan_vpcs_to_create    = local.cloud == "gcp" ? { for k, v in local.bgp_lan_interfaces : k => v["subnet"] if local.cloud == "gcp" && v["create_vpc"] } : {}
+  ha_bgp_lan_vpcs_to_create = var.ha_gw && local.cloud == "gcp" ? { for k, v in local.ha_bgp_lan_interfaces : k => v["subnet"] if local.cloud == "gcp" && v["create_vpc"] && contains(values(local.bgp_lan_vpcs_to_create), v["subnet"]) == false } : {}
 }
