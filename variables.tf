@@ -630,17 +630,25 @@ locals {
     contains(["aws", "azure", "oci"], local.cloud)
   )
 
-  bgp_lan_default_name    = local.cloud == "gcp" ? [for i, v in var.bgp_lan_interfaces : "${local.name}-bgp-${i}"] : []
-  ha_bgp_lan_default_name = var.ha_gw && local.cloud == "gcp" ? [for i, v in var.bgp_lan_interfaces : v["subnet"] == var.ha_bgp_lan_interfaces[i]["subnet"] ? local.bgp_lan_default_name[i] : "${local.name}-ha-bgp-${i}"] : []
+  #GCP BGP over LAN
+  bgp_lan_default_name = local.cloud == "gcp" ? [for i, v in var.bgp_lan_interfaces : "${local.name}-bgp-${i}"] : [] # Generate names for creating primary BGP over LAN VPCs.
+  ha_bgp_lan_default_name = var.ha_gw && local.cloud == "gcp" ? [for i, v in var.bgp_lan_interfaces :                # Compare subnets specified for primary and HA. If they're the same, we use the primary name.
+  v["subnet"] == var.ha_bgp_lan_interfaces[i]["subnet"] ? local.bgp_lan_default_name[i] : "${local.name}-ha-bgp-${i}"] : []
+
+  #Create map of final primary BGP VPC to subnets for the aviatrix_transit_gateway resource.
   bgp_lan_interfaces = local.cloud == "gcp" ? { for i, v in var.bgp_lan_interfaces : (v["vpc_id"] == "" ? local.bgp_lan_default_name[i] : v["vpc_id"]) => {
     subnet     = v["subnet"],
-    create_vpc = v["vpc_id"] == "" ? true : v["create_vpc"]
+    create_vpc = v["vpc_id"] == "" ? true : v["create_vpc"] # Create a VPC using the default name if the vpc_id is unspecified. Otherwise, create the VPC based on the boolean value.
   } } : {}
   ha_bgp_lan_interfaces = var.ha_gw && local.cloud == "gcp" ? { for i, v in var.ha_bgp_lan_interfaces : (v["vpc_id"] == "" ? local.ha_bgp_lan_default_name[i] : v["vpc_id"]) => {
     subnet     = v["subnet"],
-    create_vpc = v["vpc_id"] == "" ? true : v["create_vpc"]
+    create_vpc = v["vpc_id"] == "" ? true : v["create_vpc"] # Create a VPC using the default name if the vpc_id is unspecified. Otherwise, create the VPC based on the boolean value.
   } } : {}
 
-  bgp_lan_vpcs_to_create    = local.cloud == "gcp" ? { for k, v in local.bgp_lan_interfaces : k => v["subnet"] if local.cloud == "gcp" && v["create_vpc"] } : {}
-  ha_bgp_lan_vpcs_to_create = var.ha_gw && local.cloud == "gcp" ? { for k, v in local.ha_bgp_lan_interfaces : k => v["subnet"] if local.cloud == "gcp" && v["create_vpc"] && contains(values(local.bgp_lan_vpcs_to_create), v["subnet"]) == false } : {}
+  # Create a map of VPCs to create by filtering the entries with the create_vpc value set to false.
+  bgp_lan_vpcs_to_create = local.cloud == "gcp" ? { for k, v in local.bgp_lan_interfaces : k => v["subnet"] if v["create_vpc"] } : {}
+
+  ha_bgp_lan_vpcs_to_create = var.ha_gw && local.cloud == "gcp" ? { for k, v in local.ha_bgp_lan_interfaces :
+    k => v["subnet"] if v["create_vpc"] &&
+  contains(values(local.bgp_lan_vpcs_to_create), v["subnet"]) == false } : {} # Also filter out entries where the subnet CIDR is the same as primary so we don't try to create the same vpc twice.
 }
