@@ -1,5 +1,15 @@
 # terraform-aviatrix-mc-transit release notes
 
+## v2.5.0
+
+### Compatibility with controller version 7.1 and Terraform provider version 3.1.x
+
+### Implemented support for GRO/GSO on this gateway.
+Enabled by default and enhances gateway performance. This setting can be used to turn it off.
+
+### Broken out locals to separate file
+For beter readability, the locals are no longer part of variables.tf and can now be found in locals.tf.
+
 ## v2.4.2
 
 ### Add support for GCP BGP over LAN VPC creation.

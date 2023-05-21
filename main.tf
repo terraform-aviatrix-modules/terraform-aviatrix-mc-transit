@@ -108,7 +108,7 @@ resource "aviatrix_transit_gateway" "default" {
   bgp_lan_interfaces_count         = var.bgp_lan_interfaces_count
   enable_monitor_gateway_subnets   = var.enable_monitor_gateway_subnets
   enable_vpc_dns_server            = var.enable_vpc_dns_server
-
+  enable_gro_gso                   = var.enable_gro_gso
 
   #Custom EIP settings
   allocate_new_eip                 = var.allocate_new_eip
