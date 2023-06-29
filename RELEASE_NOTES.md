@@ -1,5 +1,9 @@
 # terraform-aviatrix-mc-transit release notes
 
+## v2.5.1
+
+### Add support for configuring bgp hold time on transit gateway.
+
 ## v2.5.0
 
 ### Compatibility with controller version 7.1 and Terraform provider version 3.1.x

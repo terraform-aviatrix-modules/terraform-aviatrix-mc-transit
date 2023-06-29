@@ -461,3 +461,14 @@ variable "enable_gro_gso" {
   type        = bool
   default     = null
 }
+
+variable "bgp_hold_time" {
+  description = "Set the BGP Hold time."
+  default     = null
+  type        = number
+
+  validation {
+    condition     = var.bgp_hold_time != null ? (var.bgp_hold_time >= 12 && var.bgp_hold_time <= 360) : true
+    error_message = "BGP Hold time needs to be between 12 and 360 seconds."
+  }
+}

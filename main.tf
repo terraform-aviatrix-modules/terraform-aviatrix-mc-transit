@@ -109,6 +109,7 @@ resource "aviatrix_transit_gateway" "default" {
   enable_monitor_gateway_subnets   = var.enable_monitor_gateway_subnets
   enable_vpc_dns_server            = var.enable_vpc_dns_server
   enable_gro_gso                   = var.enable_gro_gso
+  bgp_hold_time                    = var.bgp_hold_time
 
   #Custom EIP settings
   allocate_new_eip                 = var.allocate_new_eip
