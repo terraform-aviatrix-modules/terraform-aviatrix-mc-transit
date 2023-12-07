@@ -472,3 +472,40 @@ variable "bgp_hold_time" {
     error_message = "BGP Hold time needs to be between 12 and 360 seconds."
   }
 }
+
+variable "use_existing_vpc" {
+  description = "Set to true to use existing VPC."
+  default     = false
+  nullable    = false
+}
+
+variable "vpc_id" {
+  description = "VPC ID, for using an existing VPC."
+  type        = string
+  default     = ""
+  nullable    = false
+}
+
+variable "gw_subnet" {
+  description = "Subnet CIDR, for using an existing VPC. Required when use_existing_vpc is true"
+  type        = string
+  default     = ""
+  nullable    = false
+
+  validation {
+    condition     = var.gw_subnet == "" || can(cidrnetmask(var.gw_subnet))
+    error_message = "This does not like a valid CIDR."
+  }
+}
+
+variable "hagw_subnet" {
+  description = "Subnet CIDR, for using an existing VPC. Required when use_existing_vpc is true and ha_gw is true"
+  type        = string
+  default     = ""
+  nullable    = false
+
+  validation {
+    condition     = var.hagw_subnet == "" || can(cidrnetmask(var.hagw_subnet))
+    error_message = "This does not like a valid CIDR."
+  }
+}

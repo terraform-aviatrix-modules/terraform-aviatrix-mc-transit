@@ -5,7 +5,7 @@ In this example, the module deploys the transit VPC, a new BGP over LAN VPC, and
 ```hcl
 module "transit_gcp_for_ncc" {
   source  = "terraform-aviatrix-modules/mc-transit/aviatrix"
-  version = "2.5.1"
+  version = "2.5.2"
 
   cloud           = "gcp"
   name            = "transit-gcp-for-ncc"

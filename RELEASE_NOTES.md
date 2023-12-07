@@ -1,5 +1,11 @@
 # terraform-aviatrix-mc-transit release notes
 
+## v2.5.2
+
+### Add support for bring your own VNET/VPC
+It is encouraged to let the mc-transit module build the transit VPC/VNET in stead of bringing your own. In some scenario's however, it can be useful to have more control over the VPC/VNET creation. For example when you want to enable a DDoS plan on a VNET, or need to create additional subnets like a GatewaySubnet for deployment of an Azure Route Server/VPN Gateway.
+Using existing VPC/VNET's breaks compatibility with mc-firenet module versions up to 1.5.2.
+
 ## v2.5.1
 
 ### Add support for configuring bgp hold time on transit gateway.
