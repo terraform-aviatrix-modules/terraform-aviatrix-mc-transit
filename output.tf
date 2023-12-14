@@ -28,5 +28,12 @@ output "mc_firenet_details" {
     zone                   = local.zone,
     ha_zone                = local.ha_zone,
     use_existing_vpc       = var.use_existing_vpc,
+    vpc_id                 = var.use_existing_vpc ? var.vpc_id : aviatrix_vpc.default[0].vpc_id
+  }
+}
+
+output "module_metadata" {
+  value = {
+    version = "2.5.2"
   }
 }

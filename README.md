@@ -113,3 +113,4 @@ key | description
 [vpc](https://registry.terraform.io/providers/AviatrixSystems/aviatrix/latest/docs/resources/aviatrix_vpc) | The created VPC as an object with all of it's attributes (when use_existing_vpc is false). This was created using the aviatrix_vpc resource.
 [transit_gateway](https://registry.terraform.io/providers/AviatrixSystems/aviatrix/latest/docs/resources/aviatrix_transit_gateway) | The created Aviatrix transit gateway as an object with all of it's attributes.
 mc_firenet_details | Outputs specific for composing with [mc-firenet module](https://github.com/terraform-aviatrix-modules/terraform-aviatrix-mc-firenet)
+module_metadata | Information about the module, like module version.
