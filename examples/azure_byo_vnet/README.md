@@ -17,23 +17,19 @@ resource "azurerm_resource_group" "this" {
 }
 
 resource "azurerm_route_table" "this" {
-  for_each            = toset(["private1", "private2", "public1", "public2"])
-  name                = format("%s-%s", var.name, each.value)
+  for_each            = toset(["aviatrix-transit-gw_rtb", "egress1-rtb", "egress2-rtb"])
+  name                = each.value
   location            = var.region
   resource_group_name = azurerm_resource_group.this.name
 
-  #Only add blackhole routes for Internal route tables
-  dynamic "route" {
-    for_each = can(regex("private", each.value)) ? ["dummy"] : [] #Trick to make block conditional. Count not available on dynamic blocks.
-    content {
-      name           = "Blackhole"
-      address_prefix = "0.0.0.0/0"
-      next_hop_type  = "None"
-    }
+  route {
+    name           = "default"
+    address_prefix = "0.0.0.0/0"
+    next_hop_type  = "Internet"
   }
 
   lifecycle {
-    ignore_changes = [route, ] #Since the Aviatrix controller will maintain the routes, we want to ignore any changes to them in Terraform.
+    ignore_changes = [route, ] #Ignore changes to routing tables, as the Aviatrix controller will take over management.
   }
 }
 
@@ -45,42 +41,41 @@ module "vnet" {
   resource_group_name = azurerm_resource_group.this.name
   address_space       = ["10.1.0.0/16"]
   subnet_prefixes = [
-    "10.1.1.0/24",
-    "10.1.2.0/24",
     "10.1.101.0/24",
     "10.1.102.0/24",
+    "10.1.103.0/24",
+    "10.1.104.0/24",
   ]
   subnet_names = [
-    "Private1",
-    "Private2",
     "Public1",
     "Public2",
+    "Egress1",
+    "Egress2",
   ]
 
   route_tables_ids = {
-    Private1 = azurerm_route_table.this["private1"].id
-    Private2 = azurerm_route_table.this["private2"].id
-    Public1  = azurerm_route_table.this["public1"].id
-    Public2  = azurerm_route_table.this["public2"].id
+    Public1 = azurerm_route_table.this["aviatrix-transit-gw_rtb"].id #Using a different route table name for transit gateways causes drift. Make sure to use "aviatrix-<transit_vnet_name>-gw_rtb".
+    Public2 = azurerm_route_table.this["aviatrix-transit-gw_rtb"].id #Using a different route table name for transit gateways causes drift. Make sure to use "aviatrix-<transit_vnet_name>-gw_rtb".
+    Egress1 = azurerm_route_table.this["egress1-rtb"].id
+    Egress2 = azurerm_route_table.this["egress2-rtb"].id
   }
-
-  depends_on = [
-    azurerm_resource_group.this
-  ]
 }
-
 
 module "azure_transit" {
   source  = "terraform-aviatrix-modules/mc-transit/aviatrix"
   version = "2.5.2"
 
-  cloud   = "azure"
-  region  = var.region
-  account = "Azure"
+  cloud                  = "azure"
+  region                 = var.region
+  account                = "Azure"
+  enable_transit_firenet = true
 
   use_existing_vpc = true
   vpc_id           = format("%s:%s:%s", module.vnet.vnet_name, azurerm_resource_group.this.name, module.vnet.vnet_guid)
   gw_subnet        = "10.1.101.0/24" #Public subnet
   hagw_subnet      = "10.1.102.0/24" #Public subnet
+
+  depends_on = [module.vnet]
 }
+
 ```

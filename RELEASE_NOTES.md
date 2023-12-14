@@ -4,7 +4,10 @@
 
 ### Add support for bring your own VNET/VPC
 It is encouraged to let the mc-transit module build the transit VPC/VNET in stead of bringing your own. In some scenario's however, it can be useful to have more control over the VPC/VNET creation. For example when you want to enable a DDoS plan on a VNET, or need to create additional subnets like a GatewaySubnet for deployment of an Azure Route Server/VPN Gateway.
-Using existing VPC/VNET's breaks compatibility with mc-firenet module versions up to 1.5.2.
+
+Using existing VPC/VNET's breaks compatibility with mc-firenet module versions up to and including 1.5.3. Use 1.5.4 or newer.
+
+It can take a while for the controller to be able to find the byo VNET after creation. If deployment of the mc-transit module fails with this error: "Cannot find VNET resource group or VNET CIDR.", try again later.
 
 ## v2.5.1
 
