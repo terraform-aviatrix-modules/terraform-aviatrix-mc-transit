@@ -5,7 +5,7 @@ In this example, the module deploys the transit VNET as well as a HA pair of Avi
 ```hcl
 module "azure_transit" {
   source  = "terraform-aviatrix-modules/mc-transit/aviatrix"
-  version = "2.3.3"
+  version = "2.3.4"
 
   cloud   = "azure"
   region  = "West Europe"

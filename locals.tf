@@ -5,7 +5,7 @@ locals {
   suffix                = var.enable_egress_transit_firenet ? "-egress" : "-transit"
   region_name           = lower(replace(trim(split("(", var.region)[0], " "), " ", "-")) # Remove everything after "(" (Alibaba), trim whitespace and replace spaces with dashes. Force lowercase.
   default_name          = format("avx-%s%s", local.region_name, local.suffix)
-  cidr                  = var.cidr
+  cidr                  = var.use_existing_vpc ? "10.0.0.0/20" : var.cidr #Set dummy if existing VPC is used.
   cidrbits              = tonumber(split("/", local.cidr)[1])
   newbits               = 26 - local.cidrbits
   netnum                = pow(2, local.newbits)
@@ -29,14 +29,17 @@ locals {
     gcp   = "c",
   }
 
-  subnet = (
-    (var.insane_mode && contains(["aws", "azure", "oci"], local.cloud)) || (var.private_mode_subnets && contains(["aws", "azure"], local.cloud)) ?
-    local.insane_mode_subnet
-    :
-    (local.cloud == "gcp" ?
-      aviatrix_vpc.default.subnets[local.subnet_map[local.cloud]].cidr
+  subnet = (var.use_existing_vpc ?
+    var.gw_subnet
+    : (
+      (var.insane_mode && contains(["aws", "azure", "oci"], local.cloud)) || (var.private_mode_subnets && contains(["aws", "azure"], local.cloud)) ?
+      local.insane_mode_subnet
       :
-      aviatrix_vpc.default.public_subnets[local.subnet_map[local.cloud]].cidr
+      (local.cloud == "gcp" ?
+        aviatrix_vpc.default[0].subnets[local.subnet_map[local.cloud]].cidr
+        :
+        aviatrix_vpc.default[0].public_subnets[local.subnet_map[local.cloud]].cidr
+      )
     )
   )
 
@@ -48,17 +51,20 @@ locals {
     ali   = 0,
   }
 
-  ha_subnet = (
-    (var.insane_mode && contains(["aws", "azure", "oci"], local.cloud)) || (var.private_mode_subnets && contains(["aws", "azure"], local.cloud)) ?
-    local.ha_insane_mode_subnet
-    :
-    (local.cloud == "gcp" ?
-      aviatrix_vpc.default.subnets[local.ha_subnet_map[local.cloud]].cidr
+  ha_subnet = (var.use_existing_vpc ?
+    var.hagw_subnet :
+    (
+      (var.insane_mode && contains(["aws", "azure", "oci"], local.cloud)) || (var.private_mode_subnets && contains(["aws", "azure"], local.cloud)) ?
+      local.ha_insane_mode_subnet
       :
-      (local.single_az_mode ?
-        local.subnet
+      (local.cloud == "gcp" ?
+        aviatrix_vpc.default[0].subnets[local.ha_subnet_map[local.cloud]].cidr
         :
-        aviatrix_vpc.default.public_subnets[local.ha_subnet_map[local.cloud]].cidr
+        (local.single_az_mode ?
+          local.subnet
+          :
+          aviatrix_vpc.default[0].public_subnets[local.ha_subnet_map[local.cloud]].cidr
+        )
       )
     )
   )
@@ -152,10 +158,10 @@ locals {
   )
 
   #Determine OCI Availability domains
-  default_availability_domain    = local.cloud == "oci" ? aviatrix_vpc.default.availability_domains[0] : null
-  default_fault_domain           = local.cloud == "oci" ? aviatrix_vpc.default.fault_domains[0] : null
-  default_ha_availability_domain = var.ha_gw && local.cloud == "oci" ? (try(aviatrix_vpc.default.availability_domains[1], aviatrix_vpc.default.availability_domains[0])) : null
-  default_ha_fault_domain        = var.ha_gw && local.cloud == "oci" ? aviatrix_vpc.default.fault_domains[1] : null
+  default_availability_domain    = local.cloud == "oci" ? aviatrix_vpc.default[0].availability_domains[0] : null
+  default_fault_domain           = local.cloud == "oci" ? aviatrix_vpc.default[0].fault_domains[0] : null
+  default_ha_availability_domain = var.ha_gw && local.cloud == "oci" ? (try(aviatrix_vpc.default[0].availability_domains[1], aviatrix_vpc.default[0].availability_domains[0])) : null
+  default_ha_fault_domain        = var.ha_gw && local.cloud == "oci" ? aviatrix_vpc.default[0].fault_domains[1] : null
 
   availability_domain    = var.availability_domain != null ? var.availability_domain : local.default_availability_domain
   ha_availability_domain = var.ha_availability_domain != null ? var.ha_availability_domain : local.default_ha_availability_domain

@@ -443,3 +443,57 @@ variable "enable_vpc_dns_server" {
   type        = bool
   default     = null
 }
+
+variable "enable_gro_gso" {
+  description = "Enable GRO/GSO for this transit gateway."
+  type        = bool
+  default     = null
+}
+
+variable "bgp_hold_time" {
+  description = "Set the BGP Hold time."
+  default     = null
+  type        = number
+
+  validation {
+    condition     = var.bgp_hold_time != null ? (var.bgp_hold_time >= 12 && var.bgp_hold_time <= 360) : true
+    error_message = "BGP Hold time needs to be between 12 and 360 seconds."
+  }
+}
+
+variable "use_existing_vpc" {
+  description = "Set to true to use existing VPC."
+  default     = false
+  nullable    = false
+}
+
+variable "vpc_id" {
+  description = "VPC ID, for using an existing VPC."
+  type        = string
+  default     = ""
+  nullable    = false
+}
+
+variable "gw_subnet" {
+  description = "Subnet CIDR, for using an existing VPC. Required when use_existing_vpc is true"
+  type        = string
+  default     = ""
+  nullable    = false
+
+  validation {
+    condition     = var.gw_subnet == "" || can(cidrnetmask(var.gw_subnet))
+    error_message = "This does not like a valid CIDR."
+  }
+}
+
+variable "hagw_subnet" {
+  description = "Subnet CIDR, for using an existing VPC. Required when use_existing_vpc is true and ha_gw is true"
+  type        = string
+  default     = ""
+  nullable    = false
+
+  validation {
+    condition     = var.hagw_subnet == "" || can(cidrnetmask(var.hagw_subnet))
+    error_message = "This does not like a valid CIDR."
+  }
+}
