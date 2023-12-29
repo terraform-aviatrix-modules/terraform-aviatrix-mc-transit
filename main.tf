@@ -1,5 +1,6 @@
 # Aviatrix Transit VPC
 resource "aviatrix_vpc" "default" {
+  count                = var.use_existing_vpc ? 0 : 1
   cloud_type           = local.cloud_type
   region               = local.cloud == "gcp" ? null : var.region
   cidr                 = local.cloud == "gcp" ? null : var.cidr
@@ -67,7 +68,7 @@ resource "aviatrix_transit_gateway" "default" {
   vpc_reg                          = local.cloud == "gcp" ? local.zone : var.region
   gw_name                          = local.gw_name
   gw_size                          = local.instance_size
-  vpc_id                           = aviatrix_vpc.default.vpc_id
+  vpc_id                           = var.use_existing_vpc ? var.vpc_id : aviatrix_vpc.default[0].vpc_id
   account_name                     = var.account
   subnet                           = local.subnet
   zone                             = local.cloud == "azure" ? local.zone : null

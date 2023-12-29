@@ -5,7 +5,7 @@ In this example, the module deploys the transit VPC as well as a single of Aviat
 ```hcl
 module "transit_non_ha_gcp" {
   source  = "terraform-aviatrix-modules/mc-transit/aviatrix"
-  version = "2.4.1"
+  version = "2.4.3"
 
   cloud   = "gcp"
   name    = "transit-non-ha-gcp"
