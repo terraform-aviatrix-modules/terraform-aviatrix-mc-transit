@@ -81,6 +81,12 @@ variable "learned_cidrs_approval_mode" {
   default     = null
 }
 
+variable "approved_learned_cidrs" {
+  description = "A set of approved learned CIDRs. Only valid when enable_learned_cidrs_approval is set to true.  Example: [\"10.250.0.0/16\", \"10.251.0.0/16\"]"
+  type        = string
+  default     = null
+}
+
 variable "enable_segmentation" {
   description = "Switch to true to enable transit segmentation"
   type        = bool
