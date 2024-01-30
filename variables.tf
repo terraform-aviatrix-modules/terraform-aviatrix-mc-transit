@@ -82,7 +82,7 @@ variable "learned_cidrs_approval_mode" {
 }
 
 variable "approved_learned_cidrs" {
-  description = "A set of approved learned CIDRs. Only valid when enable_learned_cidrs_approval is set to true"
+  description = "A set of approved learned CIDRs. Only valid when enable_learned_cidrs_approval is set to true."
   type        = string
   default     = null
 }
