@@ -515,3 +515,9 @@ variable "hagw_subnet" {
     error_message = "This does not like a valid CIDR."
   }
 }
+
+variable "customized_transit_vpc_routes" {
+  description = "A list of CIDRs to be customized for the transit VPC routes."
+  type        = list(string)
+  default     = null
+}

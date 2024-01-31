@@ -1,5 +1,10 @@
 # terraform-aviatrix-mc-transit release notes
 
+## v2.5.3
+
+### Add support for customized_transit_vpc_routes
+### Add support for approved_learned_cidrs
+
 ## v2.5.2
 
 ### Add support for bring your own VNET/VPC
