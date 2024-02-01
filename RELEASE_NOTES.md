@@ -4,6 +4,7 @@
 
 ### Add support for customized_transit_vpc_routes
 ### Add support for approved_learned_cidrs
+### Add support for filtered_spoke_vpc_routes
 
 ## v2.5.2
 

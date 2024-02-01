@@ -113,6 +113,7 @@ resource "aviatrix_transit_gateway" "default" {
   enable_gro_gso                   = var.enable_gro_gso
   bgp_hold_time                    = var.bgp_hold_time
   customized_transit_vpc_routes    = var.customized_transit_vpc_routes
+  filtered_spoke_vpc_routes        = var.filtered_spoke_vpc_routes
 
   #Custom EIP settings
   allocate_new_eip                 = var.allocate_new_eip

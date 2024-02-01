@@ -521,3 +521,9 @@ variable "customized_transit_vpc_routes" {
   type        = list(string)
   default     = null
 }
+
+variable "filtered_spoke_vpc_routes" {
+  description = "A list of comma separated CIDRs to be filtered from the spoke VPC route table."
+  type        = string
+  default     = null
+}
