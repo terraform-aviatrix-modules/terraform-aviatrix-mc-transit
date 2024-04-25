@@ -1,5 +1,9 @@
 # terraform-aviatrix-mc-transit release notes
 
+## v2.5.4
+
+### Add support for enable_transit_summarize_cidr_to_tgw
+
 ## v2.5.3
 
 ### Add support for customized_transit_vpc_routes

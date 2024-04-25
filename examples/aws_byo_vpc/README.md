@@ -16,7 +16,7 @@ module "vpc" {
 
 module "aws_transit" {
   source  = "terraform-aviatrix-modules/mc-transit/aviatrix"
-  version = "2.5.3"
+  version = "2.5.4"
 
   cloud   = "aws"
   region  = "eu-central-1"

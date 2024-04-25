@@ -527,3 +527,9 @@ variable "filtered_spoke_vpc_routes" {
   type        = string
   default     = null
 }
+
+variable "enable_transit_summarize_cidr_to_tgw" {
+  description = "Enable summarize CIDR to TGW."
+  type        = bool
+  default     = null
+}
