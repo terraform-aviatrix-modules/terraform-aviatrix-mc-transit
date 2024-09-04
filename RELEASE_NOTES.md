@@ -4,6 +4,8 @@
 
 ### Add support for enable_transit_summarize_cidr_to_tgw
 
+### Add support for excluded_advertised_spoke_routes
+
 ## v2.5.3
 
 ### Add support for customized_transit_vpc_routes

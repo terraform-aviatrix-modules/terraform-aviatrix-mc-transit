@@ -115,6 +115,7 @@ resource "aviatrix_transit_gateway" "default" {
   customized_transit_vpc_routes        = var.customized_transit_vpc_routes
   filtered_spoke_vpc_routes            = var.filtered_spoke_vpc_routes
   enable_transit_summarize_cidr_to_tgw = var.enable_transit_summarize_cidr_to_tgw
+  excluded_advertised_spoke_routes     = var.excluded_advertised_spoke_routes
 
   #Custom EIP settings
   allocate_new_eip                 = var.allocate_new_eip

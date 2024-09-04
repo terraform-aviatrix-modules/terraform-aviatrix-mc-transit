@@ -533,3 +533,14 @@ variable "enable_transit_summarize_cidr_to_tgw" {
   type        = bool
   default     = null
 }
+
+variable "excluded_advertised_spoke_routes" {
+  description = "A list of comma-separated CIDRs to be advertised to on-prem as 'Excluded CIDR List'."
+  default     = null
+  type        = string
+
+  validation {
+    condition     = var.excluded_advertised_spoke_routes != null ? can(regexall("^[^,]+(,[^,]+)*$", var.excluded_advertised_spoke_routes)) : true
+    error_message = "The input must be a single string, optionally with multiple values separated by commas. Example: 'value1,value2,value3' or 'value'."
+  }
+}
