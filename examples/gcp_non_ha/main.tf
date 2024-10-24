@@ -1,6 +1,6 @@
 module "transit_non_ha_gcp" {
   source  = "terraform-aviatrix-modules/mc-transit/aviatrix"
-  version = "2.5.4"
+  version = "2.6.0"
 
   cloud   = "gcp"
   name    = "transit-non-ha-gcp"
