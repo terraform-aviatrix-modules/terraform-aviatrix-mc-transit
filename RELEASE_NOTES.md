@@ -2,7 +2,7 @@
 
 ## 8.0.0
 ### Version Alignment
-Starting with this release, this Terraform module will align its version with the Aviatrix Controller version. This means the module version has jumped from v1.7.1 to v8.0.0 to align with the Controller’s latest major version. This change makes it easier to determine which module version is compatible with which Controller version.
+Starting with this release, this Terraform module will align its version with the Aviatrix Controller version. This means the module version has jumped from v2.6.0 to v8.0.0 to align with the Controller’s latest major version. This change makes it easier to determine which module version is compatible with which Controller version.
 
 ### Relaxed version constraints
 Starting with this release, this Terraform module will move from a pessimistic constraint operator (`~>`) to a more relaxed provider version constraint (`>=`). As a result of this, module versions 8.0.0 and above can be used with newer (future) version of the Aviatrix Terraform provider, with the constraint that the newer provider version cannot have behavioral changes.
