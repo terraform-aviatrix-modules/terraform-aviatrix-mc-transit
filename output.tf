@@ -34,6 +34,6 @@ output "mc_firenet_details" {
 
 output "module_metadata" {
   value = {
-    version = "2.6.0"
+    version = "8.0.0"
   }
 }
