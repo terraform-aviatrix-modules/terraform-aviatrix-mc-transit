@@ -6,6 +6,7 @@ output "vpc" {
 output "transit_gateway" {
   description = "The created Aviatrix Transit Gateway as an object with all of it's attributes."
   value       = aviatrix_transit_gateway.default
+  sensitive   = true
 }
 
 #Firenet details is used when this module is combined with the mc-firenet module to propagate details between modules.
