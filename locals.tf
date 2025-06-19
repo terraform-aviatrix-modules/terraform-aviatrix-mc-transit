@@ -12,8 +12,8 @@ locals {
   insane_mode_subnet    = var.insane_mode || var.private_mode_subnets ? cidrsubnet(local.cidr, local.newbits, local.netnum - 2) : null
   ha_insane_mode_subnet = var.insane_mode || var.private_mode_subnets ? cidrsubnet(local.cidr, local.newbits, local.netnum - 1) : null
 
-  #Auto disable AZ support for gov and dod regions in Azure
-  az_support = local.is_gov ? false : var.az_support
+  # Auto disable AZ support for Gov, DOD and China regions in Azure
+  az_support = local.is_gov || local.is_china ? false : var.az_support
 
   az1 = length(var.az1) > 0 ? var.az1 : lookup(local.az1_map, local.cloud, null)
   az1_map = {
