@@ -184,12 +184,14 @@ locals {
   v["subnet"] == var.ha_bgp_lan_interfaces[i]["subnet"] ? local.bgp_lan_default_name[i] : "${local.name}-ha-bgp-${i}"] : []
 
   #Create map of final primary BGP VPC to subnets for the aviatrix_transit_gateway resource.
-  bgp_lan_interfaces = local.cloud == "gcp" ? { for i, v in var.bgp_lan_interfaces : (v["vpc_id"] == "" ? local.bgp_lan_default_name[i] : v["vpc_id"]) => {
+  bgp_lan_interfaces = local.cloud == "gcp" ? { for i, v in var.bgp_lan_interfaces : (v["vpc_id"] == "" ? local.bgp_lan_default_name[i] : i) => {
     subnet     = v["subnet"],
+    vpc_id     = v["vpc_id"] == "" ? local.bgp_lan_default_name[i] : v["vpc_id"],
     create_vpc = v["vpc_id"] == "" ? true : v["create_vpc"] # Create a VPC using the default name if the vpc_id is unspecified. Otherwise, create the VPC based on the boolean value.
   } } : {}
-  ha_bgp_lan_interfaces = var.ha_gw && local.cloud == "gcp" ? { for i, v in var.ha_bgp_lan_interfaces : (v["vpc_id"] == "" ? local.ha_bgp_lan_default_name[i] : v["vpc_id"]) => {
+  ha_bgp_lan_interfaces = var.ha_gw && local.cloud == "gcp" ? { for i, v in var.ha_bgp_lan_interfaces : (v["vpc_id"] == "" ? local.ha_bgp_lan_default_name[i] : i) => {
     subnet     = v["subnet"],
+    vpc_id     = v["vpc_id"] == "" ? local.ha_bgp_lan_default_name[i] : v["vpc_id"],
     create_vpc = v["vpc_id"] == "" ? true : v["create_vpc"] # Create a VPC using the default name if the vpc_id is unspecified. Otherwise, create the VPC based on the boolean value.
   } } : {}
 
