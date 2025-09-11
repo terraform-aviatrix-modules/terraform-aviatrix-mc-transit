@@ -544,3 +544,16 @@ variable "excluded_advertised_spoke_routes" {
     error_message = "The input must be a single string, optionally with multiple values separated by commas. Example: 'value1,value2,value3' or 'value'."
   }
 }
+
+variable "enable_ipv6" {
+  description = "Enable IPv6 for the VPC and transit gateway."
+  type        = bool
+  default     = false
+  nullable    = false
+}
+
+variable "vpc_ipv6_cidr" {
+  description = "IPv6 CIDR block for the VPC."
+  type        = string
+  default     = null
+}
