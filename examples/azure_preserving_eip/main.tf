@@ -20,7 +20,7 @@ resource "azurerm_public_ip" "pip2" {
 
 module "mc-transit" {
   source         = "terraform-aviatrix-modules/mc-transit/aviatrix"
-  version        = "8.0.1"
+  version        = "8.0.0"
   resource_group = azurerm_resource_group.example.name
   cloud          = "Azure"
   region         = "West Europe"
