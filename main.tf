@@ -123,6 +123,7 @@ resource "aviatrix_transit_gateway" "default" {
   enable_transit_summarize_cidr_to_tgw = var.enable_transit_summarize_cidr_to_tgw
   excluded_advertised_spoke_routes     = var.excluded_advertised_spoke_routes
   enable_ipv6                          = var.enable_ipv6
+  subnet_ipv6_cidr                     = var.subnet_ipv6_cidr
 
   #Custom EIP settings
   allocate_new_eip                 = var.allocate_new_eip
