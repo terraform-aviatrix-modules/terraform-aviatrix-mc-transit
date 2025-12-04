@@ -563,17 +563,6 @@ variable "enable_ipv6" {
   nullable    = false
 }
 
-variable "vpc_ipv6_cidr" {
-  description = "IPv6 CIDR block for the VPC."
-  type        = string
-  default     = null
-
-  validation {
-    condition     = var.vpc_ipv6_cidr == null || can(cidrhost(var.vpc_ipv6_cidr, 0))
-    error_message = "The vpc_ipv6_cidr must be a valid IPv6 CIDR block."
-  }
-}
-
 variable "ipv6_gw_subnet" {
   description = "IPv6 CIDR block for the subnet."
   type        = string

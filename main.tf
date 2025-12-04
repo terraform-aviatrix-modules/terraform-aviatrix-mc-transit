@@ -11,7 +11,7 @@ resource "aviatrix_vpc" "default" {
   resource_group       = var.resource_group
   private_mode_subnets = var.private_mode_subnets
   enable_ipv6          = var.enable_ipv6
-  vpc_ipv6_cidr        = var.vpc_ipv6_cidr
+  vpc_ipv6_cidr        = var.ipv6_cidr
 
   dynamic "subnets" {
     for_each = local.cloud == "gcp" ? ["dummy"] : [] #Trick to make block conditional. Count not available on dynamic blocks.
