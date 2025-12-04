@@ -71,7 +71,7 @@ locals {
   ipv6_insane_mode_subnet    = (var.insane_mode) && local.ipv6_cidr != null ? cidrsubnet(local.ipv6_cidr, local.ipv6_newbits, local.ipv6_netnum - 2) : null
   ipv6_ha_insane_mode_subnet = (var.insane_mode) && local.ipv6_cidr != null ? cidrsubnet(local.ipv6_cidr, local.ipv6_newbits, local.ipv6_netnum - 1) : null
 
-  subnet_ipv6 = var.enable_ipv6 ? (var.use_existing_vpc ?
+  ipv6_subnet = var.enable_ipv6 ? (var.use_existing_vpc ?
     var.ipv6_gw_subnet
     : (
       (var.insane_mode && contains(["aws", "azure", "oci"], local.cloud)) ?

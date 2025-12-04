@@ -125,7 +125,7 @@ resource "aviatrix_transit_gateway" "default" {
 
   #IPv6 Settings
   enable_ipv6         = var.enable_ipv6
-  subnet_ipv6_cidr    = local.subnet_ipv6
+  subnet_ipv6_cidr    = local.ipv6_subnet
   ha_subnet_ipv6_cidr = var.ha_gw ? var.ipv6_hagw_subnet : null
 
   #Custom EIP settings
