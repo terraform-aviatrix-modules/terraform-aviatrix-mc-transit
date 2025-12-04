@@ -71,7 +71,7 @@ locals {
   ipv6_insane_mode_subnet    = (var.insane_mode) && local.ipv6_cidr != null ? cidrsubnet(local.ipv6_cidr, local.ipv6_newbits, local.ipv6_netnum - 2) : null
   ipv6_ha_insane_mode_subnet = (var.insane_mode) && local.ipv6_cidr != null ? cidrsubnet(local.ipv6_cidr, local.ipv6_newbits, local.ipv6_netnum - 1) : null
 
-  subnet_ipv6 = (var.use_existing_vpc ?
+  subnet_ipv6 = var.enable_ipv6 ? (var.use_existing_vpc ?
     var.ipv6_gw_subnet
     : (
       (var.insane_mode && contains(["aws", "azure", "oci"], local.cloud)) ?
@@ -83,9 +83,9 @@ locals {
         aviatrix_vpc.default[0].public_subnets[local.subnet_map[local.cloud]].ipv6_cidr
       )
     )
-  )
+  ) : null
 
-  ipv6_ha_subnet = (var.use_existing_vpc ?
+  ipv6_ha_subnet = var.enable_ipv6 ? (var.use_existing_vpc ?
     var.ipv6_hagw_subnet :
     (
       (var.insane_mode && contains(["aws", "azure", "oci"], local.cloud)) ?
@@ -101,7 +101,7 @@ locals {
         )
       )
     )
-  )
+  ) : null
 
   ### AZ and Cloud Type Calculations ###
   # Auto disable AZ support for Gov, DOD and China regions in Azure
