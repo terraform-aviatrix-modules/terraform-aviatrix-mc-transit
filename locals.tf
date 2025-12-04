@@ -1,33 +1,35 @@
 locals {
-  cloud                 = lower(var.cloud)
-  name                  = coalesce(var.name, local.default_name)
-  gw_name               = coalesce(var.gw_name, local.name)
-  suffix                = var.enable_egress_transit_firenet ? "-egress" : "-transit"
-  region_name           = lower(replace(trim(split("(", var.region)[0], " "), " ", "-")) # Remove everything after "(" (Alibaba), trim whitespace and replace spaces with dashes. Force lowercase.
-  default_name          = format("avx-%s%s", local.region_name, local.suffix)
+  cloud        = lower(var.cloud)
+  name         = coalesce(var.name, local.default_name)
+  gw_name      = coalesce(var.gw_name, local.name)
+  suffix       = var.enable_egress_transit_firenet ? "-egress" : "-transit"
+  region_name  = lower(replace(trim(split("(", var.region)[0], " "), " ", "-")) # Remove everything after "(" (Alibaba), trim whitespace and replace spaces with dashes. Force lowercase.
+  default_name = format("avx-%s%s", local.region_name, local.suffix)
+
+  ### Subnet Calculations ###
+  subnet_map = {
+    azure = 2,
+    aws   = 0
+    gcp   = 0,
+    oci   = 3,
+    ali   = 0,
+  }
+
+  ha_subnet_map = {
+    azure = 3,
+    aws   = 2
+    gcp   = length(var.ha_region) > 0 ? 1 : 0
+    oci   = 1,
+    ali   = 1,
+  }
+
+  #IPv4 subnet calculations
   cidr                  = var.use_existing_vpc ? "10.0.0.0/20" : var.cidr #Set dummy if existing VPC is used.
   cidrbits              = tonumber(split("/", local.cidr)[1])
   newbits               = 26 - local.cidrbits
   netnum                = pow(2, local.newbits)
   insane_mode_subnet    = var.insane_mode || var.private_mode_subnets ? cidrsubnet(local.cidr, local.newbits, local.netnum - 2) : null
   ha_insane_mode_subnet = var.insane_mode || var.private_mode_subnets ? cidrsubnet(local.cidr, local.newbits, local.netnum - 1) : null
-
-  # Auto disable AZ support for Gov, DOD and China regions in Azure
-  az_support = local.is_gov || local.is_china ? false : var.az_support
-
-  az1 = length(var.az1) > 0 ? var.az1 : lookup(local.az1_map, local.cloud, null)
-  az1_map = {
-    azure = local.az_support ? "az-1" : null,
-    aws   = "a",
-    gcp   = "b",
-  }
-
-  az2 = length(var.az2) > 0 ? var.az2 : lookup(local.az2_map, local.cloud, null)
-  az2_map = {
-    azure = local.az_support ? "az-2" : null,
-    aws   = "b",
-    gcp   = "c",
-  }
 
   subnet = (var.use_existing_vpc ?
     var.gw_subnet
@@ -42,14 +44,6 @@ locals {
       )
     )
   )
-
-  subnet_map = {
-    azure = 2,
-    aws   = 0
-    gcp   = 0,
-    oci   = 3,
-    ali   = 0,
-  }
 
   ha_subnet = (var.use_existing_vpc ?
     var.hagw_subnet :
@@ -69,12 +63,62 @@ locals {
     )
   )
 
-  ha_subnet_map = {
-    azure = 3,
-    aws   = 2
-    gcp   = length(var.ha_region) > 0 ? 1 : 0
-    oci   = 1,
-    ali   = 1,
+  #IPv6 subnet calculations
+  ipv6_cidr                  = var.use_existing_vpc ? "1::1/120" : var.ipv6_cidr #Set dummy if existing VPC is used.
+  ipv6_cidrbits              = local.ipv6_cidr != null ? tonumber(split("/", local.ipv6_cidr)[1]) : null
+  ipv6_newbits               = local.ipv6_cidrbits != null ? 126 - local.ipv6_cidrbits : null
+  ipv6_netnum                = local.ipv6_newbits != null ? pow(2, local.ipv6_newbits) : null
+  ipv6_insane_mode_subnet    = (var.insane_mode || var.private_mode_subnets) && local.ipv6_cidr != null ? cidrsubnet(local.ipv6_cidr, local.ipv6_newbits, local.ipv6_netnum - 2) : null
+  ipv6_ha_insane_mode_subnet = (var.insane_mode || var.private_mode_subnets) && local.ipv6_cidr != null ? cidrsubnet(local.ipv6_cidr, local.ipv6_newbits, local.ipv6_netnum - 1) : null
+
+  subnet_ipv6 = (var.use_existing_vpc ?
+    var.ipv6_gw_subnet
+    : (
+      (var.insane_mode && contains(["aws", "azure", "oci"], local.cloud)) || (var.private_mode_subnets && contains(["aws", "azure"], local.cloud)) ?
+      local.ipv6_insane_mode_subnet
+      :
+      (local.cloud == "gcp" ?
+        aviatrix_vpc.default[0].subnets[local.subnet_map[local.cloud]].ipv6_cidr
+        :
+        aviatrix_vpc.default[0].public_subnets[local.subnet_map[local.cloud]].ipv6_cidr
+      )
+    )
+  )
+
+  ipv6_ha_subnet = (var.use_existing_vpc ?
+    var.ipv6_hagw_subnet :
+    (
+      (var.insane_mode && contains(["aws", "azure", "oci"], local.cloud)) || (var.private_mode_subnets && contains(["aws", "azure"], local.cloud)) ?
+      local.ipv6_ha_insane_mode_subnet
+      :
+      (local.cloud == "gcp" ?
+        aviatrix_vpc.default[0].subnets[local.ha_subnet_map[local.cloud]].ipv6_cidr
+        :
+        (local.single_az_mode ?
+          local.subnet_ipv6
+          :
+          aviatrix_vpc.default[0].public_subnets[local.ha_subnet_map[local.cloud]].ipv6_cidr
+        )
+      )
+    )
+  )
+
+  ### AZ and Cloud Type Calculations ###
+  # Auto disable AZ support for Gov, DOD and China regions in Azure
+  az_support = local.is_gov || local.is_china ? false : var.az_support
+
+  az1 = length(var.az1) > 0 ? var.az1 : lookup(local.az1_map, local.cloud, null)
+  az1_map = {
+    azure = local.az_support ? "az-1" : null,
+    aws   = "a",
+    gcp   = "b",
+  }
+
+  az2 = length(var.az2) > 0 ? var.az2 : lookup(local.az2_map, local.cloud, null)
+  az2_map = {
+    azure = local.az_support ? "az-2" : null,
+    aws   = "b",
+    gcp   = "c",
   }
 
   zone = lookup(local.zone_map, local.cloud, null)
