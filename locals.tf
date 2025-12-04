@@ -83,7 +83,7 @@ locals {
 
   ipv6_ha_subnet = (var.enable_ipv6 && contains(["aws", "azure"], local.cloud) ? #IPv6 only supported in AWS and Azure
     (var.use_existing_vpc ?
-      var.ipv6_gw_subnet
+      var.ipv6_hagw_subnet
       :
       (
         var.insane_mode ? local.ipv6_ha_insane_mode_subnet : null #If insane mode is set, use the calculated ipv6 subnet
