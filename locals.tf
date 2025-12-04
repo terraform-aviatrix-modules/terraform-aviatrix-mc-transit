@@ -68,13 +68,13 @@ locals {
   ipv6_cidrbits              = local.ipv6_cidr != null ? tonumber(split("/", local.ipv6_cidr)[1]) : null
   ipv6_newbits               = local.ipv6_cidrbits != null ? 126 - local.ipv6_cidrbits : null
   ipv6_netnum                = local.ipv6_newbits != null ? pow(2, local.ipv6_newbits) : null
-  ipv6_insane_mode_subnet    = (var.insane_mode || var.private_mode_subnets) && local.ipv6_cidr != null ? cidrsubnet(local.ipv6_cidr, local.ipv6_newbits, local.ipv6_netnum - 2) : null
-  ipv6_ha_insane_mode_subnet = (var.insane_mode || var.private_mode_subnets) && local.ipv6_cidr != null ? cidrsubnet(local.ipv6_cidr, local.ipv6_newbits, local.ipv6_netnum - 1) : null
+  ipv6_insane_mode_subnet    = (var.insane_mode) && local.ipv6_cidr != null ? cidrsubnet(local.ipv6_cidr, local.ipv6_newbits, local.ipv6_netnum - 2) : null
+  ipv6_ha_insane_mode_subnet = (var.insane_mode) && local.ipv6_cidr != null ? cidrsubnet(local.ipv6_cidr, local.ipv6_newbits, local.ipv6_netnum - 1) : null
 
   subnet_ipv6 = (var.use_existing_vpc ?
     var.ipv6_gw_subnet
     : (
-      (var.insane_mode && contains(["aws", "azure", "oci"], local.cloud)) || (var.private_mode_subnets && contains(["aws", "azure"], local.cloud)) ?
+      (var.insane_mode && contains(["aws", "azure", "oci"], local.cloud)) ?
       local.ipv6_insane_mode_subnet
       :
       (local.cloud == "gcp" ?
@@ -88,7 +88,7 @@ locals {
   ipv6_ha_subnet = (var.use_existing_vpc ?
     var.ipv6_hagw_subnet :
     (
-      (var.insane_mode && contains(["aws", "azure", "oci"], local.cloud)) || (var.private_mode_subnets && contains(["aws", "azure"], local.cloud)) ?
+      (var.insane_mode && contains(["aws", "azure", "oci"], local.cloud)) ?
       local.ipv6_ha_insane_mode_subnet
       :
       (local.cloud == "gcp" ?
