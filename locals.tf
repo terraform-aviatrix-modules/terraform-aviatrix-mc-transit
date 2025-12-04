@@ -76,7 +76,10 @@ locals {
       var.ipv6_gw_subnet
       :
       (
-        var.insane_mode ? local.ipv6_insane_mode_subnet : null #If insane mode is set, use the calculated ipv6 subnet
+        var.insane_mode ?
+        local.ipv6_insane_mode_subnet #If insane mode is set, use the calculated ipv6 insane mode subnet
+        :
+        aviatrix_vpc.default[0].public_subnets[local.subnet_map[local.cloud]].ipv6_cidr #Otherwise lookup the mapping from the created VPC
       )
     ) : null
   )
@@ -86,10 +89,13 @@ locals {
       var.ipv6_hagw_subnet
       :
       (
-        var.insane_mode ? local.ipv6_ha_insane_mode_subnet : null #If insane mode is set, use the calculated ipv6 subnet
+        var.insane_mode ? local.ipv6_ha_insane_mode_subnet #If insane mode is set, use the calculated ipv6 subnet
+        :
+        aviatrix_vpc.default[0].public_subnets[local.ha_subnet_map[local.cloud]].ipv6_cidr #Otherwise lookup the mapping from the created VPC
       )
     ) : null
   )
+
 
   ### AZ and Cloud Type Calculations ###
   # Auto disable AZ support for Gov, DOD and China regions in Azure
