@@ -585,3 +585,25 @@ variable "ipv6_hagw_subnet" {
   }
 }
 
+
+variable "tunnel_encryption_cipher" {
+  description = "Phase 2 encryption policy. Config options are default/strong."
+  type        = string
+  default     = null
+
+  validation {
+    condition     = var.tunnel_encryption_cipher == null || contains(["default", "strong"], var.tunnel_encryption_cipher)
+    error_message = "Invalid tunnel_encryption_cipher. Supported values are: default, strong."
+  }
+}
+
+variable "tunnel_forward_secrecy" {
+  description = "Phase 2 Perfect Forward Secrecy (PFS) policy. Config Options are enable/disabled."
+  type        = string
+  default     = null
+
+  validation {
+    condition     = var.tunnel_forward_secrecy == null || contains(["enable", "disabled"], var.tunnel_forward_secrecy)
+    error_message = "Invalid tunnel_forward_secrecy. Supported values are: enable, disabled."
+  }
+}

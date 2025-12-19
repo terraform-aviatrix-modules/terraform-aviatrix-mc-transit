@@ -101,6 +101,8 @@ resource "aviatrix_transit_gateway" "default" {
   enable_encrypt_volume                = var.enable_encrypt_volume
   customer_managed_keys                = var.customer_managed_keys
   tunnel_detection_time                = var.tunnel_detection_time
+  tunnel_encryption_cipher             = var.tunnel_encryption_cipher
+  tunnel_forward_secrecy               = var.tunnel_forward_secrecy
   tags                                 = var.tags
   availability_domain                  = local.availability_domain
   fault_domain                         = local.fault_domain
