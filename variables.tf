@@ -137,6 +137,17 @@ variable "lan_cidr" {
   }
 }
 
+variable "ipv6_cidr" {
+  description = "The IPv6 CIDR range to be used for the VPC"
+  type        = string
+  default     = null
+
+  validation {
+    condition     = var.ipv6_cidr == null || can(cidrhost(var.ipv6_cidr, 0))
+    error_message = "The ipv6_cidr must be a valid IPv6 CIDR block."
+  }
+}
+
 variable "enable_firenet" {
   description = "Sign of readiness for FireNet connection"
   type        = bool
@@ -544,3 +555,33 @@ variable "excluded_advertised_spoke_routes" {
     error_message = "The input must be a single string, optionally with multiple values separated by commas. Example: 'value1,value2,value3' or 'value'."
   }
 }
+
+variable "enable_ipv6" {
+  description = "Enable IPv6 for the VPC and transit gateway."
+  type        = bool
+  default     = false
+  nullable    = false
+}
+
+variable "ipv6_gw_subnet" {
+  description = "IPv6 CIDR block for the subnet."
+  type        = string
+  default     = null
+
+  validation {
+    condition     = var.ipv6_gw_subnet == null || can(cidrhost(var.ipv6_gw_subnet, 0))
+    error_message = "The ipv6_gw_subnet must be a valid IPv6 CIDR block."
+  }
+}
+
+variable "ipv6_hagw_subnet" {
+  description = "IPv6 CIDR block for the HA subnet."
+  type        = string
+  default     = null
+
+  validation {
+    condition     = var.ipv6_hagw_subnet == null || can(cidrhost(var.ipv6_hagw_subnet, 0))
+    error_message = "The ipv6_hagw_subnet must be a valid IPv6 CIDR block."
+  }
+}
+

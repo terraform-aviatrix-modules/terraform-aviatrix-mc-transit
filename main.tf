@@ -10,6 +10,8 @@ resource "aviatrix_vpc" "default" {
   aviatrix_firenet_vpc = local.aviatrix_firenet_vpc
   resource_group       = var.resource_group
   private_mode_subnets = var.private_mode_subnets
+  enable_ipv6          = var.enable_ipv6
+  vpc_ipv6_cidr        = var.ipv6_cidr
 
   dynamic "subnets" {
     for_each = local.cloud == "gcp" ? ["dummy"] : [] #Trick to make block conditional. Count not available on dynamic blocks.
@@ -44,6 +46,8 @@ resource "aviatrix_vpc" "lan_vpc" {
     cidr   = var.lan_cidr
     region = var.region
   }
+
+  #No IPv6 support for GCP LAN VPC
 }
 
 resource "aviatrix_vpc" "bgp_over_lan_vpc" {
@@ -60,6 +64,8 @@ resource "aviatrix_vpc" "bgp_over_lan_vpc" {
     cidr   = each.value
     region = var.region
   }
+
+  #No IPv6 support for GCP BGP over LAN VPCs
 }
 
 #Transit GW
@@ -116,6 +122,11 @@ resource "aviatrix_transit_gateway" "default" {
   filtered_spoke_vpc_routes            = var.filtered_spoke_vpc_routes
   enable_transit_summarize_cidr_to_tgw = var.enable_transit_summarize_cidr_to_tgw
   excluded_advertised_spoke_routes     = var.excluded_advertised_spoke_routes
+
+  #IPv6 Settings
+  enable_ipv6         = var.enable_ipv6
+  subnet_ipv6_cidr    = local.ipv6_subnet
+  ha_subnet_ipv6_cidr = var.ha_gw ? local.ipv6_ha_subnet : null
 
   #Custom EIP settings
   allocate_new_eip                 = var.allocate_new_eip

@@ -5,7 +5,7 @@ In this example, the module deploys the transit VPC as well as a HA pair of Avia
 ```hcl
 module "aws_transit" {
   source  = "terraform-aviatrix-modules/mc-transit/aviatrix"
-  version = "8.0.0"
+  version = "8.2.0"
 
   cloud         = "aws"
   region        = "eu-west-3"
