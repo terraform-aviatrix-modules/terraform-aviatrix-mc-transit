@@ -2,6 +2,8 @@
 
 ## 8.2.0
 - Add support for IPv6
+- Add support for setting encryption ciphers
+- Add output for BGP Over LAN VPC's
 
 ## 8.0.1
 - Automatically disables az_support if region is Azure China.
