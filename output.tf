@@ -33,8 +33,13 @@ output "mc_firenet_details" {
   }
 }
 
+output "bgp_over_lan_vpcs" {
+  description = "A map of all VPCs created for BGP over LAN."
+  value       = aviatrix_vpc.bgp_over_lan_vpc
+}
+
 output "module_metadata" {
   value = {
-    version = "8.0.0"
+    version = "8.2.0"
   }
 }
