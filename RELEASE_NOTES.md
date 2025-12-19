@@ -1,5 +1,8 @@
 # terraform-aviatrix-mc-transit release notes
 
+## 8.2.0
+- Add support for IPv6
+
 ## 8.0.1
 - Automatically disables az_support if region is Azure China.
 

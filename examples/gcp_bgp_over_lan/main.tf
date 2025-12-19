@@ -1,6 +1,6 @@
 module "transit_gcp_for_ncc" {
   source  = "terraform-aviatrix-modules/mc-transit/aviatrix"
-  version = "8.0.1"
+  version = "8.2.0"
 
   cloud           = "gcp"
   name            = "transit-gcp-for-ncc"
