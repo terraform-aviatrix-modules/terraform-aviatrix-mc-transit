@@ -32,7 +32,7 @@ resource "aviatrix_vpc" "default" {
   }
 }
 
-# LAN VPC 
+# LAN VPC
 resource "aviatrix_vpc" "lan_vpc" {
   count                = local.cloud == "gcp" && local.enable_transit_firenet ? 1 : 0 #Only create for GCP and when firenet is enabled
   cloud_type           = 4
@@ -154,7 +154,7 @@ resource "aviatrix_transit_gateway" "default" {
   dynamic "bgp_lan_interfaces" {
     for_each = local.bgp_lan_interfaces
     content {
-      vpc_id = bgp_lan_interfaces.key
+      vpc_id = bgp_lan_interfaces.value["vpc_id"]
       subnet = bgp_lan_interfaces.value["subnet"]
     }
   }
@@ -162,7 +162,7 @@ resource "aviatrix_transit_gateway" "default" {
   dynamic "ha_bgp_lan_interfaces" {
     for_each = local.ha_bgp_lan_interfaces
     content {
-      vpc_id = ha_bgp_lan_interfaces.key
+      vpc_id = ha_bgp_lan_interfaces.value["vpc_id"]
       subnet = ha_bgp_lan_interfaces.value["subnet"]
     }
   }
