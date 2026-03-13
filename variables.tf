@@ -599,13 +599,13 @@ variable "tunnel_encryption_cipher" {
 }
 
 variable "tunnel_forward_secrecy" {
-  description = "Phase 2 Perfect Forward Secrecy (PFS) policy. Config Options are enable/disabled."
+  description = "Phase 2 Perfect Forward Secrecy (PFS) policy. Config Options are enable/disable."
   type        = string
   default     = "enable"
   nullable    = false
 
   validation {
-    condition     = contains(["enable", "disabled"], var.tunnel_forward_secrecy)
-    error_message = "Invalid tunnel_forward_secrecy. Supported values are: enable, disabled."
+    condition     = contains(["enable", "disable"], var.tunnel_forward_secrecy)
+    error_message = "Invalid tunnel_forward_secrecy. Supported values are: enable, disable."
   }
 }
