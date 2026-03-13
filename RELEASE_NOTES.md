@@ -2,6 +2,7 @@
 
 ## 8.2.1
 - Fix an issue with subnet calculations causing an error in certain scenario's.
+- Fix an issue where validation of the `tunnel_forward_secrecy` was done incorrectly.
 
 ## 8.2.0
 - Add support for IPv6
