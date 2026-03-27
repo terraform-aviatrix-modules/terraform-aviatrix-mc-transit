@@ -68,8 +68,8 @@ locals {
   ipv6_cidrbits              = local.ipv6_cidr != null ? tonumber(split("/", local.ipv6_cidr)[1]) : null
   ipv6_newbits               = local.ipv6_cidrbits != null ? 64 - local.ipv6_cidrbits : null
   ipv6_netnum                = local.ipv6_newbits != null ? pow(2, local.ipv6_newbits) : null
-  ipv6_insane_mode_subnet    = (var.insane_mode) && local.ipv6_cidr != null ? cidrsubnet(local.ipv6_cidr, local.ipv6_newbits, local.ipv6_netnum - 2) : null
-  ipv6_ha_insane_mode_subnet = (var.insane_mode) && local.ipv6_cidr != null ? cidrsubnet(local.ipv6_cidr, local.ipv6_newbits, local.ipv6_netnum - 1) : null
+  ipv6_insane_mode_subnet    = (var.enable_ipv6 && var.insane_mode) && local.ipv6_cidr != null ? cidrsubnet(local.ipv6_cidr, local.ipv6_newbits, local.ipv6_netnum - 2) : null
+  ipv6_ha_insane_mode_subnet = (var.enable_ipv6 && var.insane_mode) && local.ipv6_cidr != null ? cidrsubnet(local.ipv6_cidr, local.ipv6_newbits, local.ipv6_netnum - 1) : null
 
   ipv6_subnet = (var.enable_ipv6 && contains(["aws", "azure"], local.cloud) ? #IPv6 only supported in AWS and Azure
     (var.use_existing_vpc ?
