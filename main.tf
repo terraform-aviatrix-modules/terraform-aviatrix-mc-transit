@@ -122,6 +122,7 @@ resource "aviatrix_transit_gateway" "default" {
   enable_monitor_gateway_subnets       = var.enable_monitor_gateway_subnets
   enable_vpc_dns_server                = var.enable_vpc_dns_server
   enable_gro_gso                       = var.enable_gro_gso
+  private_route_table_config           = length(var.private_route_table_config) > 0 ? var.private_route_table_config : null
   bgp_hold_time                        = var.bgp_hold_time
   customized_transit_vpc_routes        = var.customized_transit_vpc_routes
   filtered_spoke_vpc_routes            = var.filtered_spoke_vpc_routes

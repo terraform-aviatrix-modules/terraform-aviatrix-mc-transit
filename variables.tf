@@ -642,3 +642,10 @@ variable "tunnel_forward_secrecy" {
     error_message = "Invalid tunnel_forward_secrecy. Supported values are: enable, disable."
   }
 }
+
+variable "private_route_table_config" {
+  description = "Configuration for the private route table."
+  type        = list(string)
+  default     = []
+  nullable    = false
+}
