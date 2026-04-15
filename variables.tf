@@ -152,6 +152,7 @@ variable "ipv6_access_type" {
   description = "The IPv6 access type for the subnet, valid for GCP only"
   type        = string
   default     = ""
+  nullable    = false
 
   validation {
     condition     = var.ipv6_access_type == "" || contains(["INTERNAL", "EXTERNAL"], var.ipv6_access_type)
@@ -163,6 +164,7 @@ variable "ha_subnet_ipv6_access_type" {
   description = "The IPv6 access type for the HA subnet, valid for GCP only"
   type        = string
   default     = ""
+  nullable    = false
 
   validation {
     condition     = var.ha_subnet_ipv6_access_type == "" || contains(["INTERNAL", "EXTERNAL"], var.ha_subnet_ipv6_access_type)
@@ -174,6 +176,7 @@ variable "subnet_ipv6_access_type" {
   description = "The IPv6 access type for the subnet, valid for GCP only"
   type        = string
   default     = ""
+  nullable    = false
 
   validation {
     condition     = var.subnet_ipv6_access_type == "" || contains(["INTERNAL", "EXTERNAL"], var.subnet_ipv6_access_type)
