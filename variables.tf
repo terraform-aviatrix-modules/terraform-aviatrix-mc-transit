@@ -9,7 +9,7 @@ variable "cloud" {
 }
 
 variable "name" {
-  description = "Name for this transit VPC and it's gateways"
+  description = "Name for this Transit VPC/VNET/VCN and it's gateways. Gateway name can be overridden with gw_name."
   type        = string
   default     = ""
   nullable    = false
@@ -95,7 +95,7 @@ variable "enable_segmentation" {
 }
 
 variable "ha_region" {
-  description = "Secondary GCP region where subnet and HA Aviatrix Transit Gateway will be created"
+  description = "Region for multi region HA. HA is multi-az single region by default, but will become multi region when this is set."
   type        = string
   default     = ""
   nullable    = false
@@ -114,7 +114,7 @@ variable "cidr" {
 }
 
 variable "ha_cidr" {
-  description = "CIDR of the HA GCP subnet"
+  description = "The IP CIDR to be used to create ha_region spoke subnet. Only required when ha_region is set."
   type        = string
   default     = ""
   nullable    = false
@@ -126,7 +126,7 @@ variable "ha_cidr" {
 }
 
 variable "lan_cidr" {
-  description = "The CIDR range to be used for the LAN VPC for Firenet in GCP"
+  description = "CIDR for LAN VPC for GCP Firenet. Only required when deploying in GCP and enable_transit_firenet is true."
   type        = string
   default     = ""
   nullable    = false
@@ -145,6 +145,42 @@ variable "ipv6_cidr" {
   validation {
     condition     = var.ipv6_cidr == null || can(cidrhost(var.ipv6_cidr, 0))
     error_message = "The ipv6_cidr must be a valid IPv6 CIDR block."
+  }
+}
+
+variable "ipv6_access_type" {
+  description = "The IPv6 access type for the primary gateway subnet, valid for GCP only. Valid values: INTERNAL, EXTERNAL."
+  type        = string
+  default     = ""
+  nullable    = false
+
+  validation {
+    condition     = var.ipv6_access_type == "" || contains(["INTERNAL", "EXTERNAL"], var.ipv6_access_type)
+    error_message = "The ipv6_access_type must be either INTERNAL or EXTERNAL."
+  }
+}
+
+variable "ha_subnet_ipv6_access_type" {
+  description = "The IPv6 access type for the HA subnet, valid for GCP only. Valid values: INTERNAL, EXTERNAL."
+  type        = string
+  default     = ""
+  nullable    = false
+
+  validation {
+    condition     = var.ha_subnet_ipv6_access_type == "" || contains(["INTERNAL", "EXTERNAL"], var.ha_subnet_ipv6_access_type)
+    error_message = "The ha_subnet_ipv6_access_type must be either INTERNAL or EXTERNAL."
+  }
+}
+
+variable "subnet_ipv6_access_type" {
+  description = "The IPv6 access type for the primary subnet, valid for GCP only. Valid values: INTERNAL, EXTERNAL."
+  type        = string
+  default     = ""
+  nullable    = false
+
+  validation {
+    condition     = var.subnet_ipv6_access_type == "" || contains(["INTERNAL", "EXTERNAL"], var.subnet_ipv6_access_type)
+    error_message = "The subnet_ipv6_access_type must be either INTERNAL or EXTERNAL."
   }
 }
 
@@ -204,7 +240,7 @@ variable "local_as_number" {
 }
 
 variable "enable_bgp_over_lan" {
-  description = "Enable BGP over LAN. Creates eth4 for integration with SDWAN for example"
+  description = "Enable BGP over LAN. Creates interface for integration with SDWAN or other BGP peerings over LAN."
   type        = bool
   default     = false
   nullable    = false
@@ -237,21 +273,21 @@ variable "insane_mode" {
 }
 
 variable "az1" {
-  description = "Concatenates with region to form az names. e.g. eu-central-1a. Only used for insane mode"
+  description = "Concatenates with region to form az names. e.g. eu-central-1a. Only used for insane mode and AWS GWLB."
   type        = string
   default     = ""
   nullable    = false
 }
 
 variable "az2" {
-  description = "Concatenates with region to form az names. e.g. eu-central-1b. Only used for insane mode"
+  description = "Concatenates with region to form az names. e.g. eu-central-1b. Only used for insane mode and AWS GWLB. If az1 and az2 are equal, single AZ mode (deploy everything in 1 AZ) is triggered."
   type        = string
   default     = ""
   nullable    = false
 }
 
 variable "az_support" {
-  description = "Set to true if the Azure region supports AZ's"
+  description = "Set to false if the region does not support Availability Zones. Automatically set to false for gov and dod regions."
   type        = bool
   default     = true
   nullable    = false
@@ -302,7 +338,7 @@ variable "tags" {
 }
 
 variable "resource_group" {
-  description = "Provide the name of an existing resource group."
+  description = "Specify existing resource group to deploy transit resources into."
   type        = string
   default     = null
 }
@@ -504,7 +540,7 @@ variable "vpc_id" {
 }
 
 variable "gw_subnet" {
-  description = "Subnet CIDR, for using an existing VPC. Required when use_existing_vpc is true"
+  description = "Subnet CIDR, for using an existing VPC. Required when use_existing_vpc is true. Make sure this is a public subnet."
   type        = string
   default     = ""
   nullable    = false
@@ -516,7 +552,7 @@ variable "gw_subnet" {
 }
 
 variable "hagw_subnet" {
-  description = "Subnet CIDR, for using an existing VPC. Required when use_existing_vpc is true and ha_gw is true"
+  description = "Subnet CIDR, for using an existing VPC. Required when use_existing_vpc is true and ha_gw is true. Make sure this is a public subnet."
   type        = string
   default     = ""
   nullable    = false
@@ -608,4 +644,11 @@ variable "tunnel_forward_secrecy" {
     condition     = contains(["enable", "disable"], var.tunnel_forward_secrecy)
     error_message = "Invalid tunnel_forward_secrecy. Supported values are: enable, disable."
   }
+}
+
+variable "private_route_table_config" {
+  description = "Configuration for the private route table."
+  type        = list(string)
+  default     = []
+  nullable    = false
 }

@@ -12,22 +12,25 @@ resource "aviatrix_vpc" "default" {
   private_mode_subnets = var.private_mode_subnets
   enable_ipv6          = var.enable_ipv6
   vpc_ipv6_cidr        = var.ipv6_cidr
+  ipv6_access_type     = (var.enable_ipv6 && local.cloud == "gcp") ? var.ipv6_access_type : null
 
   dynamic "subnets" {
     for_each = local.cloud == "gcp" ? ["dummy"] : [] #Trick to make block conditional. Count not available on dynamic blocks.
     content {
-      name   = local.name
-      cidr   = var.cidr
-      region = var.region
+      name             = local.name
+      cidr             = var.cidr
+      region           = var.region
+      ipv6_access_type = var.enable_ipv6 ? var.subnet_ipv6_access_type : null
     }
   }
 
   dynamic "subnets" {
     for_each = length(var.ha_region) > 0 ? ["dummy"] : [] #Trick to make block conditional. Count not available on dynamic blocks.
     content {
-      name   = "${local.name}-ha"
-      cidr   = var.ha_cidr
-      region = var.ha_region
+      name             = "${local.name}-ha"
+      cidr             = var.ha_cidr
+      region           = var.ha_region
+      ipv6_access_type = var.enable_ipv6 ? var.ha_subnet_ipv6_access_type : null
     }
   }
 }
@@ -119,6 +122,7 @@ resource "aviatrix_transit_gateway" "default" {
   enable_monitor_gateway_subnets       = var.enable_monitor_gateway_subnets
   enable_vpc_dns_server                = var.enable_vpc_dns_server
   enable_gro_gso                       = var.enable_gro_gso
+  private_route_table_config           = length(var.private_route_table_config) > 0 ? var.private_route_table_config : null
   bgp_hold_time                        = var.bgp_hold_time
   customized_transit_vpc_routes        = var.customized_transit_vpc_routes
   filtered_spoke_vpc_routes            = var.filtered_spoke_vpc_routes
