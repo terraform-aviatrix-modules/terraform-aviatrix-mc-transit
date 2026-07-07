@@ -28,13 +28,13 @@ locals {
   cidrbits              = tonumber(split("/", local.cidr)[1])
   newbits               = 26 - local.cidrbits
   netnum                = pow(2, local.newbits)
-  insane_mode_subnet    = var.insane_mode || var.private_mode_subnets ? cidrsubnet(local.cidr, local.newbits, local.netnum - 2) : null
-  ha_insane_mode_subnet = var.insane_mode || var.private_mode_subnets ? cidrsubnet(local.cidr, local.newbits, local.netnum - 1) : null
+  insane_mode_subnet    = var.insane_mode ? cidrsubnet(local.cidr, local.newbits, local.netnum - 2) : null
+  ha_insane_mode_subnet = var.insane_mode ? cidrsubnet(local.cidr, local.newbits, local.netnum - 1) : null
 
   subnet = (var.use_existing_vpc ?
     var.gw_subnet
     : (
-      (var.insane_mode && contains(["aws", "azure", "oci"], local.cloud)) || (var.private_mode_subnets && contains(["aws", "azure"], local.cloud)) ?
+      var.insane_mode && contains(["aws", "azure", "oci"], local.cloud) ?
       local.insane_mode_subnet
       :
       (local.cloud == "gcp" ?
@@ -48,7 +48,7 @@ locals {
   ha_subnet = (var.use_existing_vpc ?
     var.hagw_subnet :
     (
-      (var.insane_mode && contains(["aws", "azure", "oci"], local.cloud)) || (var.private_mode_subnets && contains(["aws", "azure"], local.cloud)) ?
+      var.insane_mode && contains(["aws", "azure", "oci"], local.cloud) ?
       local.ha_insane_mode_subnet
       :
       (local.cloud == "gcp" ?
@@ -219,7 +219,7 @@ locals {
 
   #VPC Type Settings
   aviatrix_transit_vpc = contains(["ali"], local.cloud) || var.legacy_transit_vpc
-  aviatrix_firenet_vpc = (var.legacy_transit_vpc || var.private_mode_subnets ?
+  aviatrix_firenet_vpc = (var.legacy_transit_vpc ?
     false
     :
     contains(["aws", "azure", "oci"], local.cloud)
