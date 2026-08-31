@@ -9,7 +9,6 @@ resource "aviatrix_vpc" "default" {
   aviatrix_transit_vpc = local.aviatrix_transit_vpc
   aviatrix_firenet_vpc = local.aviatrix_firenet_vpc
   resource_group       = var.resource_group
-  private_mode_subnets = var.private_mode_subnets
   enable_ipv6          = var.enable_ipv6
   vpc_ipv6_cidr        = var.ipv6_cidr
   ipv6_access_type     = (var.enable_ipv6 && local.cloud == "gcp") ? var.ipv6_access_type : null
@@ -140,11 +139,6 @@ resource "aviatrix_transit_gateway" "default" {
   ha_eip                           = var.ha_eip
   azure_eip_name_resource_group    = var.azure_eip_name_resource_group
   ha_azure_eip_name_resource_group = var.ha_azure_eip_name_resource_group
-
-  #Private mode settings
-  private_mode_lb_vpc_id      = var.private_mode_lb_vpc_id
-  private_mode_subnet_zone    = var.private_mode_subnets && local.cloud == "aws" ? format("%s%s", var.region, local.az1) : null
-  ha_private_mode_subnet_zone = var.private_mode_subnets && local.cloud == "aws" && var.ha_gw ? format("%s%s", var.region, local.az2) : null
 
   #Firenet Settings
   enable_firenet                = var.enable_firenet

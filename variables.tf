@@ -460,19 +460,6 @@ variable "enable_monitor_gateway_subnets" {
   default     = false
 }
 
-variable "private_mode_lb_vpc_id" {
-  description = "VPC ID of Private Mode load balancer. Required when Private Mode is enabled on the Controller."
-  type        = string
-  default     = null
-}
-
-variable "private_mode_subnets" {
-  description = "Switch to only launch private subnets. Only available when Private Mode is enabled on the Controller."
-  type        = bool
-  default     = false
-  nullable    = false
-}
-
 variable "allocate_new_eip" {
   description = "When value is false, reuse an idle address in Elastic IP pool for this gateway. Otherwise, allocate a new Elastic IP and use it for this gateway."
   type        = bool
