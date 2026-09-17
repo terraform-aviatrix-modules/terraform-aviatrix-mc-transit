@@ -1,5 +1,12 @@
 # terraform-aviatrix-mc-transit release notes
 
+## 10.1.0
+### Remove deprecated private mode support
+This release removes the deprecated private mode configuration and related logic from the module. 
+
+### Align with controller and provider 10.1
+This module has been updated to align with the Aviatrix Controller and Terraform provider version 10.1.x.
+
 ## 9.0.0
 ### Add support for GCP IPv6 access type configuration
 Three new variables have been added to control IPv6 access type on GCP subnets:
